@@ -1,0 +1,317 @@
+{
+  "review_date": "2026-11-15",
+  "scope": "Read-only metadata and selected source-file retrieval; no upstream code executed, no hosted-service validation, and no full security audit. File entries record retrieval, not a claim that every line was reviewed.",
+  "repositories": [
+    {
+      "repo": "chesterkuo/OpenKnowledgePulse",
+      "default_branch": "main",
+      "sha": "9ff0e3f4531f9b02bfad391d780a27db69f0245b",
+      "commit_date": "2026-02-24T14:24:09Z",
+      "archived": false,
+      "license": "Apache-2.0",
+      "snapshot_url": "https://github.com/chesterkuo/OpenKnowledgePulse/tree/9ff0e3f4531f9b02bfad391d780a27db69f0245b",
+      "retrieved_files": [
+        {
+          "path": "README.md",
+          "url": "https://raw.githubusercontent.com/chesterkuo/OpenKnowledgePulse/9ff0e3f4531f9b02bfad391d780a27db69f0245b/README.md",
+          "bytes": 10001,
+          "sha256": "62ac6092c1181c6946a4a9f295cd0ea2f5c20a8f543b0d92e85393a613325d07"
+        },
+        {
+          "path": "LICENSE",
+          "url": "https://raw.githubusercontent.com/chesterkuo/OpenKnowledgePulse/9ff0e3f4531f9b02bfad391d780a27db69f0245b/LICENSE",
+          "bytes": 10759,
+          "sha256": "646e00e8fe2805b540780f7fbb409a219d790d54e68600d4896faf6333c87330"
+        },
+        {
+          "path": "package.json",
+          "url": "https://raw.githubusercontent.com/chesterkuo/OpenKnowledgePulse/9ff0e3f4531f9b02bfad391d780a27db69f0245b/package.json",
+          "bytes": 924,
+          "sha256": "25bb2ad34c21ef2482996e1211916180667a374419b8dc6ca95a744cd2cb4ee4"
+        },
+        {
+          "path": "packages/sdk/src/types/knowledge-unit.ts",
+          "url": "https://raw.githubusercontent.com/chesterkuo/OpenKnowledgePulse/9ff0e3f4531f9b02bfad391d780a27db69f0245b/packages/sdk/src/types/knowledge-unit.ts",
+          "bytes": 3487,
+          "sha256": "bad1ee6041f1274b1773bbde395566b5f80e6f1d81470bffb7a043243dbd57fb"
+        },
+        {
+          "path": "packages/sdk/src/types/zod-schemas.ts",
+          "url": "https://raw.githubusercontent.com/chesterkuo/OpenKnowledgePulse/9ff0e3f4531f9b02bfad391d780a27db69f0245b/packages/sdk/src/types/zod-schemas.ts",
+          "bytes": 5690,
+          "sha256": "1efd983fe20275027a5886c3e8e2debdf4452f4fc7ccb227a039c99b36c677f7"
+        },
+        {
+          "path": "packages/sdk/src/scoring.ts",
+          "url": "https://raw.githubusercontent.com/chesterkuo/OpenKnowledgePulse/9ff0e3f4531f9b02bfad391d780a27db69f0245b/packages/sdk/src/scoring.ts",
+          "bytes": 3654,
+          "sha256": "386da9b491416f542c30559cfab11aa7d0fcce81858d3d743bc9514979fce7b3"
+        },
+        {
+          "path": "packages/sdk/src/utils/sanitizer.ts",
+          "url": "https://raw.githubusercontent.com/chesterkuo/OpenKnowledgePulse/9ff0e3f4531f9b02bfad391d780a27db69f0245b/packages/sdk/src/utils/sanitizer.ts",
+          "bytes": 2013,
+          "sha256": "4f88af2a84d52f9be4447e72d3ed59abc9fd4626873a7b78d3ffe879eefb41fd"
+        },
+        {
+          "path": "registry/src/routes/knowledge.ts",
+          "url": "https://raw.githubusercontent.com/chesterkuo/OpenKnowledgePulse/9ff0e3f4531f9b02bfad391d780a27db69f0245b/registry/src/routes/knowledge.ts",
+          "bytes": 4752,
+          "sha256": "84c7b6db8f4e63bdbe844ae137c5b2982a8cc105195a644d15bbf03b5375f3c5"
+        },
+        {
+          "path": "registry/src/middleware/auth.ts",
+          "url": "https://raw.githubusercontent.com/chesterkuo/OpenKnowledgePulse/9ff0e3f4531f9b02bfad391d780a27db69f0245b/registry/src/middleware/auth.ts",
+          "bytes": 1146,
+          "sha256": "e26d18c3496f7ccd5dcc42de73c519b57f5bb828802340672f0801ebe49c7d49"
+        },
+        {
+          "path": "registry/src/store/postgres/knowledge-store.ts",
+          "url": "https://raw.githubusercontent.com/chesterkuo/OpenKnowledgePulse/9ff0e3f4531f9b02bfad391d780a27db69f0245b/registry/src/store/postgres/knowledge-store.ts",
+          "bytes": 5678,
+          "sha256": "4c9a7f34095abc22d7f78c686f7a0fd3d957e8479abe8b8cca4dcfe9a21a9555"
+        },
+        {
+          "path": "packages/mcp-server/src/tools/contribute-knowledge.ts",
+          "url": "https://raw.githubusercontent.com/chesterkuo/OpenKnowledgePulse/9ff0e3f4531f9b02bfad391d780a27db69f0245b/packages/mcp-server/src/tools/contribute-knowledge.ts",
+          "bytes": 755,
+          "sha256": "673b3c496a1aafe15ad10581c569b45c1c62e3628096573f80b29fb4dc7d5af9"
+        },
+        {
+          "path": "packages/mcp-server/src/tools/search-knowledge.ts",
+          "url": "https://raw.githubusercontent.com/chesterkuo/OpenKnowledgePulse/9ff0e3f4531f9b02bfad391d780a27db69f0245b/packages/mcp-server/src/tools/search-knowledge.ts",
+          "bytes": 1282,
+          "sha256": "103ecbe0c9847a95aba75e73c0f3972436f56dd84fabf335838bcb501d39b873"
+        }
+      ]
+    },
+    {
+      "repo": "abund-ai/abund.ai",
+      "default_branch": "main",
+      "sha": "ec383047aaeecefdde4463c906df7e2ae612e7bd",
+      "commit_date": "2026-09-25T16:35:47Z",
+      "archived": false,
+      "license": "NOASSERTION",
+      "snapshot_url": "https://github.com/abund-ai/abund.ai/tree/ec383047aaeecefdde4463c906df7e2ae612e7bd",
+      "license_note": "Observed custom Source Available License v1.0; do not treat marketing language or NOASSERTION metadata as permission to fork or host.",
+      "retrieved_files": [
+        {
+          "path": "LICENSE.md",
+          "url": "https://raw.githubusercontent.com/abund-ai/abund.ai/ec383047aaeecefdde4463c906df7e2ae612e7bd/LICENSE.md",
+          "bytes": 5206,
+          "sha256": "f5f40f836b16bff570ff70d6cb4503eab9e7e7bcddb9499d1e795c4fc8a809fa"
+        },
+        {
+          "path": "README.md",
+          "url": "https://raw.githubusercontent.com/abund-ai/abund.ai/ec383047aaeecefdde4463c906df7e2ae612e7bd/README.md",
+          "bytes": 25021,
+          "sha256": "8d1c96cd4d23cf9a27ddf921282f798f61b630bd720fd2a8fa3f98ad46037117"
+        },
+        {
+          "path": "workers/src/routes/findings.ts",
+          "url": "https://raw.githubusercontent.com/abund-ai/abund.ai/ec383047aaeecefdde4463c906df7e2ae612e7bd/workers/src/routes/findings.ts",
+          "bytes": 10726,
+          "sha256": "abc3996ce1de4aab29301e00b054c9190642fddc38c9751da34d5e7ca7a9e458"
+        },
+        {
+          "path": "workers/src/lib/findings.ts",
+          "url": "https://raw.githubusercontent.com/abund-ai/abund.ai/ec383047aaeecefdde4463c906df7e2ae612e7bd/workers/src/lib/findings.ts",
+          "bytes": 6856,
+          "sha256": "b87276d6590fa9a584fc22113ec1ff88b5a141455b5ab45b675e830ea6fe8020"
+        },
+        {
+          "path": "workers/src/lib/moderation.ts",
+          "url": "https://raw.githubusercontent.com/abund-ai/abund.ai/ec383047aaeecefdde4463c906df7e2ae612e7bd/workers/src/lib/moderation.ts",
+          "bytes": 44582,
+          "sha256": "38254b21ac447b63370ab565a7ce23758acbf55ac3de52e1a08b6e1a7cd08648"
+        },
+        {
+          "path": "workers/src/db/migrations/0027_findings.sql",
+          "url": "https://raw.githubusercontent.com/abund-ai/abund.ai/ec383047aaeecefdde4463c906df7e2ae612e7bd/workers/src/db/migrations/0027_findings.sql",
+          "bytes": 3800,
+          "sha256": "9ea10be6cab9d063dd0cd85b21392fc21c2de5180fe33452ebe2a99a65f742ee"
+        },
+        {
+          "path": "packages/mcp/README.md",
+          "url": "https://raw.githubusercontent.com/abund-ai/abund.ai/ec383047aaeecefdde4463c906df7e2ae612e7bd/packages/mcp/README.md",
+          "bytes": 6170,
+          "sha256": "17829a38cc3ebc7f055a8b5566d0d0071a676ab8d00b375bd79851fb755adffb"
+        }
+      ]
+    },
+    {
+      "repo": "andrewyng/context-hub",
+      "default_branch": "main",
+      "sha": "67dcbeb2eb42c808549f08397920ad58be7c2206",
+      "commit_date": "2026-05-31T18:39:40Z",
+      "archived": false,
+      "license": "MIT",
+      "snapshot_url": "https://github.com/andrewyng/context-hub/tree/67dcbeb2eb42c808549f08397920ad58be7c2206",
+      "retrieved_files": [
+        {
+          "path": "README.md",
+          "url": "https://raw.githubusercontent.com/andrewyng/context-hub/67dcbeb2eb42c808549f08397920ad58be7c2206/README.md",
+          "bytes": 5124,
+          "sha256": "45f23233aca189cd917f7569450e28158b0b7519b042f3a3d4c84aec2254b1a7"
+        },
+        {
+          "path": "LICENSE",
+          "url": "https://raw.githubusercontent.com/andrewyng/context-hub/67dcbeb2eb42c808549f08397920ad58be7c2206/LICENSE",
+          "bytes": 1081,
+          "sha256": "524da9090746fea395d713b0c3bddda2fd2e1ab7512e462db48162655714741f"
+        },
+        {
+          "path": "docs/feedback-and-annotations.md",
+          "url": "https://raw.githubusercontent.com/andrewyng/context-hub/67dcbeb2eb42c808549f08397920ad58be7c2206/docs/feedback-and-annotations.md",
+          "bytes": 4774,
+          "sha256": "1fd8e7ddcf18ca528a0473259b6466fe1035d0bb3e9438708383f4f7c6ed6907"
+        },
+        {
+          "path": "cli/src/commands/feedback.js",
+          "url": "https://raw.githubusercontent.com/andrewyng/context-hub/67dcbeb2eb42c808549f08397920ad58be7c2206/cli/src/commands/feedback.js",
+          "bytes": 6342,
+          "sha256": "f06afcca306e24e75b0655837ae31aef33fe788a39b791109b56ebf29ae99c06"
+        },
+        {
+          "path": "cli/src/lib/annotations.js",
+          "url": "https://raw.githubusercontent.com/andrewyng/context-hub/67dcbeb2eb42c808549f08397920ad58be7c2206/cli/src/lib/annotations.js",
+          "bytes": 1344,
+          "sha256": "e73c6b41dcd350be1b2f2f766b53ea7befdd599793e251c3c4f8895ab482de7c"
+        }
+      ]
+    },
+    {
+      "repo": "upstash/context7",
+      "default_branch": "master",
+      "sha": "4087030ad2dc16578130e2dab1e48ba735f8ea38",
+      "commit_date": "2026-11-14T15:54:57Z",
+      "archived": false,
+      "license": "MIT",
+      "snapshot_url": "https://github.com/upstash/context7/tree/4087030ad2dc16578130e2dab1e48ba735f8ea38",
+      "retrieved_files": [
+        {
+          "path": "README.md",
+          "url": "https://raw.githubusercontent.com/upstash/context7/4087030ad2dc16578130e2dab1e48ba735f8ea38/README.md",
+          "bytes": 13039,
+          "sha256": "a23306f5d9a04eb8588b619071a418d901f27549ace077ecbb28f21161a46912"
+        },
+        {
+          "path": "LICENSE",
+          "url": "https://raw.githubusercontent.com/upstash/context7/4087030ad2dc16578130e2dab1e48ba735f8ea38/LICENSE",
+          "bytes": 1079,
+          "sha256": "85cfb556dc2b22b55d2565674fcdaac82f3f2f6b7a928d27003132721bb6736c"
+        },
+        {
+          "path": "packages/mcp/package.json",
+          "url": "https://raw.githubusercontent.com/upstash/context7/4087030ad2dc16578130e2dab1e48ba735f8ea38/packages/mcp/package.json",
+          "bytes": 2515,
+          "sha256": "438249b452fb53a95b70b6bb1ca24955f2d56a48a2c742d8e878f177d110fcb4"
+        },
+        {
+          "path": "packages/mcp/src/lib/api.ts",
+          "url": "https://raw.githubusercontent.com/upstash/context7/4087030ad2dc16578130e2dab1e48ba735f8ea38/packages/mcp/src/lib/api.ts",
+          "bytes": 20990,
+          "sha256": "79a21b32c397aad461c60dd15645d8634385fc4aea9efd67633975762aa3b290"
+        },
+        {
+          "path": "docs/enterprise/on-premise.mdx",
+          "url": "https://raw.githubusercontent.com/upstash/context7/4087030ad2dc16578130e2dab1e48ba735f8ea38/docs/enterprise/on-premise.mdx",
+          "bytes": 20203,
+          "sha256": "8b8519ebdce8dd0734106c4682d18d191b8b8fff99ecb7f95f8342c019246542"
+        }
+      ]
+    },
+    {
+      "repo": "openagents-org/openagents",
+      "default_branch": "develop",
+      "sha": "830564228f2e7b68552c42b0c6080ec7fe06f792",
+      "commit_date": "2026-11-15T19:22:23Z",
+      "archived": false,
+      "license": "Apache-2.0",
+      "snapshot_url": "https://github.com/openagents-org/openagents/tree/830564228f2e7b68552c42b0c6080ec7fe06f792",
+      "retrieved_files": [
+        {
+          "path": "README.md",
+          "url": "https://raw.githubusercontent.com/openagents-org/openagents/830564228f2e7b68552c42b0c6080ec7fe06f792/README.md",
+          "bytes": 28981,
+          "sha256": "021744f67842899c7b7df63632c20781ac5da672af01e4ac27662214348fa763"
+        },
+        {
+          "path": "LICENSE",
+          "url": "https://raw.githubusercontent.com/openagents-org/openagents/830564228f2e7b68552c42b0c6080ec7fe06f792/LICENSE",
+          "bytes": 11357,
+          "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+        },
+        {
+          "path": "pyproject.toml",
+          "url": "https://raw.githubusercontent.com/openagents-org/openagents/830564228f2e7b68552c42b0c6080ec7fe06f792/pyproject.toml",
+          "bytes": 5948,
+          "sha256": "c2dfc84b17cf0438e5a4f9be3e6326641b446d8e698dd23128480b7352a50ea9"
+        }
+      ]
+    },
+    {
+      "repo": "getzep/graphiti",
+      "default_branch": "main",
+      "sha": "869c1b279e01a2767a464581e1cb657ce0e39271",
+      "commit_date": "2026-11-15T20:27:41Z",
+      "archived": false,
+      "license": "Apache-2.0",
+      "snapshot_url": "https://github.com/getzep/graphiti/tree/869c1b279e01a2767a464581e1cb657ce0e39271",
+      "retrieved_files": [
+        {
+          "path": "README.md",
+          "url": "https://raw.githubusercontent.com/getzep/graphiti/869c1b279e01a2767a464581e1cb657ce0e39271/README.md",
+          "bytes": 37891,
+          "sha256": "9ce191cedfc99840b78e2be24fe1be9a1f71937d62244ee72bca1d0d039069d3"
+        },
+        {
+          "path": "SECURITY.md",
+          "url": "https://raw.githubusercontent.com/getzep/graphiti/869c1b279e01a2767a464581e1cb657ce0e39271/SECURITY.md",
+          "bytes": 2474,
+          "sha256": "293b03ee5f1a6f096e5ab3d7fcb31c659550f7ed46abf1e545dd8e0f8a8be25b"
+        }
+      ]
+    },
+    {
+      "repo": "mem0ai/mem0",
+      "default_branch": "main",
+      "sha": "f1791daa86d469249c9b002f62644d58a1eb96a0",
+      "commit_date": "2026-11-06T16:53:06Z",
+      "archived": false,
+      "license": "Apache-2.0",
+      "snapshot_url": "https://github.com/mem0ai/mem0/tree/f1791daa86d469249c9b002f62644d58a1eb96a0",
+      "retrieved_files": [
+        {
+          "path": "README.md",
+          "url": "https://raw.githubusercontent.com/mem0ai/mem0/f1791daa86d469249c9b002f62644d58a1eb96a0/README.md",
+          "bytes": 12306,
+          "sha256": "f72db3426438dbdf6879a2b50583fbee8e7e2dde5d01308c6295bcd09fd3db86"
+        }
+      ]
+    },
+    {
+      "repo": "jmiao24/Paper2Agent",
+      "default_branch": "main",
+      "sha": "8c2d059165ef8cdcb70dbea76655b9c2b55b38e6",
+      "commit_date": "2026-09-17T16:56:07Z",
+      "archived": false,
+      "license": "MIT",
+      "snapshot_url": "https://github.com/jmiao24/Paper2Agent/tree/8c2d059165ef8cdcb70dbea76655b9c2b55b38e6",
+      "retrieved_files": [
+        {
+          "path": "README.md",
+          "url": "https://raw.githubusercontent.com/jmiao24/Paper2Agent/8c2d059165ef8cdcb70dbea76655b9c2b55b38e6/README.md",
+          "bytes": 9096,
+          "sha256": "703474e9e7c3ef1e19fc705ad5333cf11b805d2efd9717967bdc1e8355797f16"
+        },
+        {
+          "path": "skills/paper2agent/paper2mcp/references/agents/test-verifier-improver.md",
+          "url": "https://raw.githubusercontent.com/jmiao24/Paper2Agent/8c2d059165ef8cdcb70dbea76655b9c2b55b38e6/skills/paper2agent/paper2mcp/references/agents/test-verifier-improver.md",
+          "bytes": 4120,
+          "sha256": "ea4fff5d656663ab052fff34a7ae01c4cef0afadb944057b1b61ee3eeef1b351"
+        }
+      ]
+    }
+  ]
+}

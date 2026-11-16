@@ -2,6 +2,8 @@
 
 Status: Design requirements for a future prototype. No security controls, moderation service, or validation infrastructure have been implemented or tested by this repository.
 
+The [v0.1 prototype plan](prototype-plan.md) starts with local fixtures, deterministic screening and human review. It excludes arbitrary submitted-code execution, unrestricted URL fetching, public hosting and a permanent AI moderation service. The broader controls below apply as those capabilities are evaluated for later stages.
+
 ## Security objective
 
 Permit useful knowledge exchange while protecting contributors' information, preserving the integrity of evidence, and keeping execution authority with the responsible human or organization. Treat remote nodes, knowledge records, attachments, tool descriptions, and agent messages as untrusted inputs.

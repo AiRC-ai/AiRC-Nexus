@@ -59,7 +59,11 @@ Records would distinguish an unverified proposal, source support, a contributor'
 | [Security and privacy](docs/security.md) | Proposed controls, moderation, consent, and validation requirements |
 | [Governance](docs/governance.md) | Founding commitments, interim stewardship, licensing questions, and sustainability |
 | [Roadmap](docs/roadmap.md) | Research and pilot milestones with observable exit criteria |
-| [Research](docs/research.md) | Primary-source starting points, related projects, and unresolved assumptions |
+| [Research](docs/research.md) | Research index, current conclusions, and unresolved assumptions |
+| [Existing work](docs/research/landscape-2026-11-15.md) | Competitor and standards review with selected source-code observations |
+| [Prototype plan](docs/prototype-plan.md) | Concrete v0.1 scope, recommended stack, permission/evidence model, build sequence, and evaluation gates |
+
+The proposed first build is a local, single-node website/API/MCP service proving the retrieval, validation-reporting, and private contribution loop. Read the [prototype plan](docs/prototype-plan.md) for implementation work packages; cross-node federation and agent delegation have later acceptance gates.
 
 ## First research questions
 

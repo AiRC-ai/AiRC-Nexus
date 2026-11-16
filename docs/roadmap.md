@@ -2,6 +2,8 @@
 
 Status: Proposed milestones. This is a sequence of validation gates, not a delivery schedule or a commitment to a particular implementation stack.
 
+For the implementation-ready proposal, use the [concrete prototype plan](prototype-plan.md) and its P0–P5 work packages. It proposes a local single-node v0.1, a separate v0.2 federation demonstration, and later bounded agent collaboration. The [landscape review](research/landscape-2026-11-15.md) records why these stages should reuse existing standards and test specific gaps.
+
 ## 0. Establish the concept repository
 
 Publish the founding vision with architecture, security, governance, research references, and this roadmap. Keep the distinction between intention and demonstrated behavior visible.

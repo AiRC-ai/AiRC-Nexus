@@ -2,6 +2,8 @@
 
 Status: Concept and research. No component or interface described here is implemented. Names and record fields are working proposals, not a published protocol contract.
 
+This document describes the long-term system. The [concrete prototype plan](prototype-plan.md) narrows v0.1 to a local single node, recommends a technical stack and schema, and defines separately tested federation and agent-collaboration milestones. Those recommendations remain proposals until implemented and validated.
+
 ## System shape
 
 Nexus would provide discovery over a federation of independently operated knowledge nodes. A node controls its own records, access rules, evidence storage, and publication decisions. A public index can reference authorized public material; private knowledge can remain at its originating node.
