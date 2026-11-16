@@ -5,8 +5,9 @@ import { syncAll } from '../../packages/federation/sync.js';
 
 const path = process.env.NEXUS_FEDERATION_IDENTITY;
 if (!path) throw new Error('federation_identity_required');
-const identity = await loadIdentity(path),
-  pool = createPool((await loadConfig()).federation_url);
+const config = await loadConfig(),
+  identity = await loadIdentity(path),
+  pool = createPool(config.federation_url);
 let stopped = false,
   reported = false;
 for (const signal of ['SIGTERM', 'SIGINT'])
@@ -15,7 +16,10 @@ for (const signal of ['SIGTERM', 'SIGINT'])
   });
 while (!stopped) {
   try {
-    await syncAll(pool, identity);
+    await syncAll(pool, identity, {
+      httpsOnly: config.https_peers_only,
+      ...(config.federation_ca_file ? { caFile: config.federation_ca_file } : {}),
+    });
     reported = false;
   } catch {
     if (!reported) console.error('nexus_federation: sync unavailable; no freshness was extended');

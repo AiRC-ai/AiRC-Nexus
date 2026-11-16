@@ -1,6 +1,6 @@
 {
   "name": "airc-nexus",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "private": true,
   "type": "module",
   "description": "Local AiRC Nexus evidence-reuse prototype",
@@ -24,7 +24,7 @@
     "setup": "tsx scripts/bootstrap.ts",
     "demo": "node scripts/demo.mjs",
     "demo:stop": "node scripts/demo.mjs --stop",
-    "format:check": "prettier --check apps packages scripts tests fixtures evals package.json tsconfig.json vitest.config.ts playwright.config.ts compose.yaml",
+    "format:check": "prettier --check apps packages scripts tests fixtures evals package.json tsconfig.json vitest.config.ts playwright.config.ts compose.yaml deploy",
     "test:e2e": "playwright test",
     "seed:exchange": "tsx scripts/seed-exchange.ts",
     "eval:smoke": "tsx evals/smoke.ts",
@@ -41,7 +41,9 @@
     "federation:start": "node scripts/federation-demo.mjs",
     "federation:stop": "node scripts/federation-demo.mjs --stop",
     "federation:admin": "tsx scripts/federation-admin.ts",
-    "federation:verify": "tsx evals/federation-live.ts"
+    "federation:verify": "tsx evals/federation-live.ts",
+    "hosted:init": "node dist/scripts/host-init.js",
+    "hosted:admin": "node dist/scripts/host-admin.js"
   },
   "dependencies": {
     "@fastify/cookie": "11.1.5",

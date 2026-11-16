@@ -8,18 +8,23 @@ import {
   HelpReplySchema,
 } from '../../packages/contracts/index.js';
 import { packContext } from '../../packages/core/context.js';
+import { nodeRequest, httpsOrigin } from '../../packages/core/node-http.js';
 
 export function createNexusServer(base: string, token?: string) {
   const origin = new URL(base);
-  if (
+  if (origin.protocol === 'https:') httpsOrigin(base);
+  else if (
     !['127.0.0.1', 'localhost'].includes(origin.hostname) ||
     origin.protocol !== 'http:' ||
     origin.username ||
-    origin.password
+    origin.password ||
+    origin.pathname !== '/' ||
+    origin.search ||
+    origin.hash
   )
-    throw new Error('local_api_origin_required');
+    throw new Error('node_api_origin_required');
   const server = new McpServer(
-    { name: 'airc-nexus', version: '0.2.0' },
+    { name: 'airc-nexus', version: '0.3.0' },
     {
       maxToolInputElements: 256,
       instructions:
@@ -33,38 +38,22 @@ export function createNexusServer(base: string, token?: string) {
     signal: AbortSignal,
     key?: string,
   ) {
-    const response = await fetch(new URL(path, origin), {
+    const response = await nodeRequest(new URL(path, origin), {
       method,
-      redirect: 'error',
-      signal: AbortSignal.any([signal, AbortSignal.timeout(8_000)]),
+      signal,
+      timeoutMs: 8000,
+      maxBytes: 262144,
       headers: {
         ...(token ? { Authorization: `Bearer ${token}` } : {}),
         ...(input ? { 'Content-Type': 'application/json' } : {}),
         ...(key ? { 'Idempotency-Key': key } : {}),
       },
       ...(input ? { body: JSON.stringify(input) } : {}),
+      ...(process.env.NEXUS_CA_FILE ? { caFile: process.env.NEXUS_CA_FILE } : {}),
     });
-    const chunks: Uint8Array[] = [];
-    let bytes = 0;
-    const reader = response.body?.getReader();
-    if (!reader) throw new Error('empty_response');
-    try {
-      while (true) {
-        const next = await reader.read();
-        if (next.done) break;
-        bytes += next.value.byteLength;
-        if (bytes > 262_144) {
-          await reader.cancel();
-          throw new Error('response_limit');
-        }
-        chunks.push(next.value);
-      }
-    } finally {
-      reader.releaseLock();
-    }
-    const raw = Buffer.concat(chunks).toString('utf8');
+    const raw = response.text;
     const result = JSON.parse(raw);
-    if (!response.ok)
+    if (response.status < 200 || response.status >= 300)
       throw new Error(
         `nexus_${response.status}_${String(result.error ?? 'request_failed').slice(0, 100)}`,
       );

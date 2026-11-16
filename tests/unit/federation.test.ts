@@ -83,11 +83,14 @@ describe('signed federation envelope', () => {
     for (const url of [
       'http://localhost:4320',
       'http://127.0.0.1:80',
-      'https://example.com',
       'http://127.0.0.1:4320/private',
       'http://user:password@127.0.0.1:4320',
       'http://127.0.0.1:4320/?next=secret',
     ])
       expect(() => peerEndpoint(url)).toThrow();
+    expect(peerEndpoint('https://node.example.org:9443', true)).toBe(
+      'https://node.example.org:9443',
+    );
+    expect(() => peerEndpoint('http://127.0.0.1:4320', true)).toThrow();
   });
 });

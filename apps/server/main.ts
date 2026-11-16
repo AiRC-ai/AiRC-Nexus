@@ -12,6 +12,7 @@ const app = await buildApp(pool, {
   port: config.port,
   ...(federation ? { federation } : {}),
   ...(config.browser_host ? { browserHost: config.browser_host } : {}),
+  ...(config.public_origin ? { publicOrigin: config.public_origin } : {}),
 });
 for (const signal of ['SIGTERM', 'SIGINT'])
   process.on(signal, () => {

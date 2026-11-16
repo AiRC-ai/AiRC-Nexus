@@ -15,6 +15,7 @@ import { authenticate, tokenHash, withActor, type Pool } from '../../packages/db
 import { Federation } from '../../packages/federation/service.js';
 import { SearchSchema } from '../../packages/contracts/index.js';
 import { packContext } from '../../packages/core/context.js';
+import { httpsOrigin } from '../../packages/core/node-http.js';
 
 declare module 'fastify' {
   interface FastifyRequest {
@@ -28,6 +29,7 @@ export async function buildApp(
     staticRoot?: string;
     federation?: Federation;
     browserHost?: string;
+    publicOrigin?: string;
   } = {},
 ) {
   const app = Fastify({
@@ -39,11 +41,13 @@ export async function buildApp(
   const store = new Store(pool);
   const help = new HelpExchange(pool);
   const federation = options.federation;
+  const publicOrigin = options.publicOrigin ? httpsOrigin(options.publicOrigin) : undefined;
+  const publicHost = publicOrigin ? new URL(publicOrigin).host : undefined;
   const browserHost = options.browserHost
     ? z.enum(['north.localhost', 'south.localhost']).parse(options.browserHost)
     : undefined;
   const sessionCookie = federation
-    ? `nexus_${federation.identity.node_id.replaceAll('-', '')}`
+    ? `${publicOrigin ? '__Host-' : ''}nexus_${federation.identity.node_id.replaceAll('-', '')}`
     : 'nexus_session';
   if (federation) await federation.ready();
   await app.register(cookie);
@@ -68,28 +72,36 @@ export async function buildApp(
     const address = app.server.address();
     const port = address && typeof address === 'object' ? address.port : (options.port ?? 4318);
     const host = request.headers.host;
-    if (
-      host !== `127.0.0.1:${port}` &&
-      host !== `localhost:${port}` &&
-      (!browserHost || host !== `${browserHost}:${port}`)
-    )
-      throw new NexusError('invalid_host', 403);
-    if (browserHost && host !== `${browserHost}:${port}`) {
-      if (request.url.startsWith('/api/auth/'))
-        throw new NexusError('canonical_browser_host_required', 403);
+    if (publicOrigin) {
+      const localHealth =
+        request.url.split('?')[0] === '/health' &&
+        (host === `127.0.0.1:${port}` || host === `localhost:${port}`) &&
+        ['127.0.0.1', '::1'].includes(request.ip);
+      if (host !== publicHost && !localHealth) throw new NexusError('invalid_host', 403);
+    } else {
       if (
-        !request.url.startsWith('/api/') &&
-        !request.url.startsWith('/health') &&
-        ['GET', 'HEAD'].includes(request.method)
+        host !== `127.0.0.1:${port}` &&
+        host !== `localhost:${port}` &&
+        (!browserHost || host !== `${browserHost}:${port}`)
       )
-        return reply.redirect(`http://${browserHost}:${port}${request.url}`);
+        throw new NexusError('invalid_host', 403);
+      if (browserHost && host !== `${browserHost}:${port}`) {
+        if (request.url.startsWith('/api/auth/'))
+          throw new NexusError('canonical_browser_host_required', 403);
+        if (
+          !request.url.startsWith('/api/') &&
+          !request.url.startsWith('/health') &&
+          ['GET', 'HEAD'].includes(request.method)
+        )
+          return reply.redirect(`http://${browserHost}:${port}${request.url}`);
+      }
     }
     if (request.url.startsWith('/api/')) reply.header('Cache-Control', 'no-store');
     if (!['GET', 'HEAD', 'OPTIONS'].includes(request.method)) {
       const origin = request.headers.origin;
       const browserMutation =
         !!request.cookies[sessionCookie] || request.url.startsWith('/api/auth/');
-      if ((browserMutation || origin) && origin !== `http://${host}`)
+      if ((browserMutation || origin) && origin !== (publicOrigin ?? `http://${host}`))
         throw new NexusError('invalid_origin', 403);
     }
     if (request.url.startsWith('/api/auth/')) return;
@@ -135,7 +147,11 @@ export async function buildApp(
   app.get('/health', async () => {
     await pool.query('SELECT 1');
     if (federation) await federation.ready();
-    return { status: 'ok', mode: 'local-demo', version: '0.2.0' };
+    return {
+      status: 'ok',
+      mode: publicOrigin ? 'hosted-prototype' : 'local-demo',
+      version: '0.3.0',
+    };
   });
   app.get('/api/v1/node', () =>
     federation
@@ -163,9 +179,9 @@ export async function buildApp(
       ]);
       if (!r.rows[0].accepted) throw new NexusError('invalid_sign_in_code', 401);
       reply.setCookie(sessionCookie, token, {
+        secure: !!publicOrigin,
         httpOnly: true,
         sameSite: 'strict',
-        secure: false,
         path: '/',
         maxAge: 43_200,
       });
@@ -177,7 +193,7 @@ export async function buildApp(
       await pool.query('SELECT nexus.revoke_session($1)', [
         tokenHash(request.cookies[sessionCookie]!),
       ]);
-    reply.clearCookie(sessionCookie, { path: '/' });
+    reply.clearCookie(sessionCookie, { path: '/', secure: !!publicOrigin });
     return { signed_out: true };
   });
   app.get('/api/me', async (request) => ({

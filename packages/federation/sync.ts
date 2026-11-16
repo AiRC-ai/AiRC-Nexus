@@ -1,5 +1,6 @@
 import { type Pool } from '../db/index.js';
 import { screen } from '../core/screen.js';
+import { nodeRequest } from '../core/node-http.js';
 import {
   acceptSnapshot,
   artifactDigest,
@@ -13,6 +14,7 @@ export async function syncPeer(
   pool: Pool,
   identity: Identity,
   peer: { node_id: string; endpoint: string; key_id: string; public_key: string },
+  transport: { httpsOnly?: boolean; caFile?: string } = {},
 ) {
   const db = await pool.connect();
   let locked = false;
@@ -28,34 +30,20 @@ export async function syncPeer(
       throw new Error('identity_mismatch');
     const started = Date.now();
     const { request, envelope } = requestFor(identity, peer.node_id, started);
-    const response = await fetch(`${peerEndpoint(peer.endpoint)}/api/federation/v1/snapshot`, {
-      method: 'POST',
-      redirect: 'error',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(envelope),
-      signal: AbortSignal.timeout(3000),
-    });
-    if (!response.ok) throw new Error('peer_unavailable');
-    const chunks: Uint8Array[] = [];
-    let bytes = 0;
-    const reader = response.body?.getReader();
-    if (!reader) throw new Error('empty_snapshot');
-    try {
-      while (true) {
-        const item = await reader.read();
-        if (item.done) break;
-        bytes += item.value.byteLength;
-        if (bytes > MAX_PACKET_BYTES) {
-          await reader.cancel();
-          throw new Error('snapshot_capacity');
-        }
-        chunks.push(item.value);
-      }
-    } finally {
-      reader.releaseLock();
-    }
+    const response = await nodeRequest(
+      new URL('/api/federation/v1/snapshot', peerEndpoint(peer.endpoint, transport.httpsOnly)),
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(envelope),
+        timeoutMs: 3000,
+        maxBytes: MAX_PACKET_BYTES,
+        ...(transport.caFile ? { caFile: transport.caFile } : {}),
+      },
+    );
+    if (response.status !== 200) throw new Error('peer_unavailable');
     const { packet, until } = acceptSnapshot(
-      JSON.parse(Buffer.concat(chunks).toString('utf8')),
+      JSON.parse(response.text),
       peer,
       identity.node_id,
       request.nonce,
@@ -91,10 +79,14 @@ export async function syncPeer(
     db.release();
   }
 }
-export async function syncAll(pool: Pool, identity: Identity) {
+export async function syncAll(
+  pool: Pool,
+  identity: Identity,
+  transport: { httpsOnly?: boolean; caFile?: string } = {},
+) {
   const peers = (await pool.query('SELECT * FROM nexus.fed_worker_peers()')).rows;
   const results = [];
   for (const peer of peers)
-    results.push({ peer_id: peer.node_id, ...(await syncPeer(pool, identity, peer)) });
+    results.push({ peer_id: peer.node_id, ...(await syncPeer(pool, identity, peer, transport)) });
   return results;
 }

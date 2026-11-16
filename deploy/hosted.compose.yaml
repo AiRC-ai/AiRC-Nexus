@@ -1,0 +1,152 @@
+name: ${NEXUS_PROJECT}
+x-runtime: &runtime
+  image: ${NEXUS_IMAGE}
+  user: '${NEXUS_UID}:${NEXUS_GID}'
+  read_only: true
+  init: true
+  tmpfs: ['/tmp:size=32m,mode=1777']
+  cap_drop: [ALL]
+  security_opt: [no-new-privileges:true]
+  restart: unless-stopped
+services:
+  database:
+    image: postgres:18.7@sha256:2ea8630df176ad090ec92136dee850397c5af8781e4bcf2e4162593691c61bbc
+    environment:
+      POSTGRES_DB: nexus
+      POSTGRES_PASSWORD_FILE: /run/secrets/postgres_password
+    secrets: [postgres_password]
+    volumes: ['${NEXUS_STATE_DIR}/data:/var/lib/postgresql']
+    networks: [data]
+    restart: unless-stopped
+    cpus: 1
+    mem_limit: 768m
+    healthcheck:
+      test: [CMD-SHELL, pg_isready -U postgres -d nexus]
+      interval: 2s
+      timeout: 2s
+      retries: 30
+  app:
+    <<: *runtime
+    command: [node, dist/apps/server/main.js]
+    depends_on:
+      database: { condition: service_healthy }
+    environment:
+      NEXUS_DATABASE_URL_FILE: /run/secrets/app_url
+      NEXUS_PORT: 8080
+      NEXUS_LISTEN_HOST: 0.0.0.0
+      NEXUS_PUBLIC_ORIGIN: ${NEXUS_PUBLIC_ORIGIN}
+      NEXUS_FEDERATION_IDENTITY: /identity/identity.json
+    secrets: [app_url]
+    volumes: ['${NEXUS_STATE_DIR}/identity:/identity:ro']
+    networks: [data]
+    cpus: 0.5
+    mem_limit: 384m
+    healthcheck:
+      test:
+        [
+          CMD,
+          node,
+          -e,
+          "fetch('http://127.0.0.1:8080/health').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))",
+        ]
+      interval: 3s
+      timeout: 2s
+      retries: 25
+  worker:
+    <<: *runtime
+    command: [node, dist/apps/worker/main.js]
+    depends_on:
+      database: { condition: service_healthy }
+    environment:
+      NEXUS_WORKER_DATABASE_URL_FILE: /run/secrets/worker_url
+    secrets: [worker_url]
+    networks: [data]
+    cpus: 0.2
+    mem_limit: 192m
+  verifier:
+    <<: *runtime
+    command: [node, dist/apps/federation/main.js]
+    depends_on:
+      database: { condition: service_healthy }
+    environment:
+      NEXUS_FEDERATION_DATABASE_URL_FILE: /run/secrets/federation_url
+      NEXUS_FEDERATION_IDENTITY: /identity/identity.json
+      NEXUS_CA_FILE: /trust/root.crt
+      NEXUS_HTTPS_PEERS_ONLY: 1
+    secrets: [federation_url]
+    volumes: ['${NEXUS_STATE_DIR}/identity:/identity:ro', '${NEXUS_STATE_DIR}/trust:/trust:ro']
+    networks: [data, egress]
+    cpus: 0.25
+    mem_limit: 192m
+  proxy:
+    image: nginx:stable-alpine@sha256:901e593c95dc85f5a729f5765516321366ef4ac401821431d408897e95287d0a
+    user: '${NEXUS_UID}:${NEXUS_GID}'
+    entrypoint: [/bin/sh, /nexus/proxy.sh]
+    depends_on:
+      app: { condition: service_healthy }
+    ports: ['${NEXUS_BIND_IP}:9443:8443']
+    volumes:
+      [
+        '${NEXUS_STATE_DIR}/tls:/tls:ro',
+        './nginx.conf:/etc/nginx/nginx.conf:ro',
+        './proxy.sh:/nexus/proxy.sh:ro',
+      ]
+    networks: [data, egress]
+    read_only: true
+    init: true
+    tmpfs: ['/tmp:size=32m,mode=1777']
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    restart: unless-stopped
+    cpus: 0.25
+    mem_limit: 96m
+  renewal:
+    image: smallstep/step-cli:latest@sha256:107e8497646c0e7c06cc5b6fd6fa13b5d2001909df6d7da3706b8541ed42bddf
+    user: '${NEXUS_UID}:${NEXUS_GID}'
+    entrypoint: [step]
+    command:
+      - ca
+      - renew
+      - /tls/node.crt
+      - /tls/node.key
+      - --daemon
+      - --expires-in=720h
+      - '--ca-url=${NEXUS_CA_URL}'
+      - --root=/trust/root.crt
+    environment:
+      STEPPATH: /tmp/step
+    volumes: ['${NEXUS_STATE_DIR}/tls:/tls', '${NEXUS_STATE_DIR}/trust:/trust:ro']
+    networks: [egress]
+    read_only: true
+    tmpfs: ['/tmp:size=16m,mode=1777']
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    restart: unless-stopped
+    cpus: 0.1
+    mem_limit: 96m
+  operator:
+    <<: *runtime
+    restart: 'no'
+    profiles: [tools]
+    depends_on:
+      database: { condition: service_healthy }
+    environment:
+      NEXUS_PUBLIC_ORIGIN: ${NEXUS_PUBLIC_ORIGIN}
+      NEXUS_NODE_LABEL: ${NEXUS_NODE_LABEL}
+      NEXUS_OPERATOR_NAME: ${NEXUS_OPERATOR_NAME}
+    command: [node, dist/scripts/host-admin.js]
+    secrets: [postgres_password, app_password, worker_password, federation_password]
+    volumes: ['${NEXUS_STATE_DIR}:/state']
+    networks: [data]
+secrets:
+  postgres_password: { file: '${NEXUS_STATE_DIR}/secrets/postgres_password' }
+  app_password: { file: '${NEXUS_STATE_DIR}/secrets/app_password' }
+  worker_password: { file: '${NEXUS_STATE_DIR}/secrets/worker_password' }
+  federation_password: { file: '${NEXUS_STATE_DIR}/secrets/federation_password' }
+  app_url: { file: '${NEXUS_STATE_DIR}/secrets/app_url' }
+  worker_url: { file: '${NEXUS_STATE_DIR}/secrets/worker_url' }
+  federation_url: { file: '${NEXUS_STATE_DIR}/secrets/federation_url' }
+networks:
+  data:
+    internal: true
+  egress:

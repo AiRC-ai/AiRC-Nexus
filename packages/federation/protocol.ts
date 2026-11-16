@@ -10,6 +10,8 @@ import {
 import { readFile } from 'node:fs/promises';
 import { z } from 'zod';
 import canonicalize from 'canonicalize';
+import { httpsOrigin } from '../core/node-http.js';
+import { resolve, dirname } from 'node:path';
 import { ContentSchema, AssessmentSchema, EvidenceOutcomeSchema } from '../contracts/index.js';
 
 export const PROTOCOL = 'airc-nexus-federation/0.2' as const;
@@ -116,7 +118,7 @@ export async function loadIdentity(path: string): Promise<Identity> {
     })
     .strict()
     .parse(JSON.parse(await readFile(path, 'utf8')));
-  const private_key = await readFile(config.private_key_file, 'utf8');
+  const private_key = await readFile(resolve(dirname(path), config.private_key_file), 'utf8');
   if (
     createPrivateKey(private_key).asymmetricKeyType !== 'ed25519' ||
     keyId(config.public_key) !== config.key_id ||
@@ -204,8 +206,10 @@ export function acceptSnapshot(
   }
   return { packet, until };
 }
-export function peerEndpoint(value: string) {
+export function peerEndpoint(value: string, httpsOnly = false) {
   const url = new URL(value);
+  if (url.protocol === 'https:') return httpsOrigin(value);
+  if (httpsOnly) throw new Error('https_peer_required');
   const port = Number(url.port);
   if (
     url.protocol !== 'http:' ||

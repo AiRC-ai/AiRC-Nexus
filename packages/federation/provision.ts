@@ -21,11 +21,12 @@ export async function configurePeer(
   admin: Pool,
   peer: Pick<Identity, 'node_id' | 'label' | 'key_id' | 'public_key'>,
   endpoint: string,
+  httpsOnly = false,
 ) {
   z.uuid().parse(peer.node_id);
   z.string().min(1).max(100).parse(peer.label);
   if (keyId(peer.public_key) !== peer.key_id) throw new Error('invalid_peer_pin');
-  const url = peerEndpoint(endpoint),
+  const url = peerEndpoint(endpoint, httpsOnly),
     db = await admin.connect();
   try {
     await db.query('BEGIN');

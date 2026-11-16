@@ -10,6 +10,9 @@ export interface LocalConfig {
   port: number;
   origin: string;
   browser_host: string;
+  public_origin: string;
+  federation_ca_file: string;
+  https_peers_only: boolean;
 }
 export async function loadConfig(): Promise<LocalConfig> {
   let config: Partial<LocalConfig> = {};
@@ -35,5 +38,9 @@ export async function loadConfig(): Promise<LocalConfig> {
     port,
     origin: process.env.NEXUS_ORIGIN ?? config.origin ?? `http://127.0.0.1:${port}`,
     browser_host: config.browser_host ?? '',
+    public_origin: process.env.NEXUS_PUBLIC_ORIGIN ?? config.public_origin ?? '',
+    federation_ca_file: process.env.NEXUS_CA_FILE ?? config.federation_ca_file ?? '',
+    https_peers_only:
+      process.env.NEXUS_HTTPS_PEERS_ONLY === '1' || config.https_peers_only === true,
   };
 }
