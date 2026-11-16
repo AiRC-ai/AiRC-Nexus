@@ -5,14 +5,18 @@ export interface LocalConfig {
   admin_url: string;
   app_url: string;
   worker_url: string;
+  federation_url: string;
   container: string;
   port: number;
   origin: string;
+  browser_host: string;
 }
 export async function loadConfig(): Promise<LocalConfig> {
   let config: Partial<LocalConfig> = {};
   try {
-    config = JSON.parse(await readFile(resolve('.nexus/local.json'), 'utf8'));
+    config = JSON.parse(
+      await readFile(resolve(process.env.NEXUS_CONFIG_FILE ?? '.nexus/local.json'), 'utf8'),
+    );
   } catch (error) {
     if ((error as NodeJS.ErrnoException).code !== 'ENOENT') throw error;
   }
@@ -26,8 +30,10 @@ export async function loadConfig(): Promise<LocalConfig> {
     admin_url: await secret('NEXUS_ADMIN_DATABASE_URL', config.admin_url),
     app_url: await secret('NEXUS_DATABASE_URL', config.app_url),
     worker_url: await secret('NEXUS_WORKER_DATABASE_URL', config.worker_url),
+    federation_url: await secret('NEXUS_FEDERATION_DATABASE_URL', config.federation_url),
     container: config.container ?? '',
     port,
     origin: process.env.NEXUS_ORIGIN ?? config.origin ?? `http://127.0.0.1:${port}`,
+    browser_host: config.browser_host ?? '',
   };
 }

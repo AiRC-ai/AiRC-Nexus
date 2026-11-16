@@ -1,9 +1,18 @@
 import { createPool } from '../../packages/db/index.js';
 import { loadConfig } from '../../packages/core/config.js';
 import { buildApp } from './app.js';
+import { Federation } from '../../packages/federation/service.js';
+import { loadIdentity } from '../../packages/federation/protocol.js';
 const config = await loadConfig();
 const pool = createPool(config.app_url);
-const app = await buildApp(pool, { port: config.port });
+const federation = process.env.NEXUS_FEDERATION_IDENTITY
+  ? new Federation(pool, await loadIdentity(process.env.NEXUS_FEDERATION_IDENTITY))
+  : undefined;
+const app = await buildApp(pool, {
+  port: config.port,
+  ...(federation ? { federation } : {}),
+  ...(config.browser_host ? { browserHost: config.browser_host } : {}),
+});
 for (const signal of ['SIGTERM', 'SIGINT'])
   process.on(signal, () => {
     void app.close().then(() => pool.end());

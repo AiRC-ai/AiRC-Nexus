@@ -2,6 +2,7 @@ import { useState, type FormEvent } from 'react';
 import { useResource } from './api.js';
 import { Arrow, SearchIcon, Feedback, Loading, recordLink, useDraft } from './ui.js';
 import type { SearchResults } from './types.js';
+import { remoteLink } from './FederationPage.js';
 
 export function SearchPage() {
   const [form, setForm] = useDraft('search', {
@@ -9,6 +10,7 @@ export function SearchPage() {
     runtime: '',
     version: '',
     disputed: false,
+    federated: false,
   });
   const [request, setRequest] = useDraft(
     'search-request',
@@ -27,6 +29,7 @@ export function SearchPage() {
           environment: JSON.stringify(environment),
           include_unknown: 'true',
           show_disputed: String(form.disputed),
+          include_federated: String(form.federated),
           limit: '5',
           budget_bytes: '32000',
         }),
@@ -81,6 +84,14 @@ export function SearchPage() {
             />{' '}
             Include disputed
           </label>
+          <label className="check">
+            <input
+              type="checkbox"
+              checked={form.federated}
+              onChange={(e) => setForm({ ...form, federated: e.target.checked })}
+            />{' '}
+            Include shared nodes
+          </label>
         </div>
       </form>
       <div className="section-heading">
@@ -90,14 +101,22 @@ export function SearchPage() {
       <Feedback error={resource.error} />
       {resource.loading ? <Loading /> : null}
       {resource.data?.data.map((row) => (
-        <a className="result-row" key={row.id} href={recordLink(row.id, row.revision_id)}>
+        <a
+          className="result-row"
+          key={`${row.origin_node ?? 'local'}:${row.id}`}
+          href={
+            row.origin_node
+              ? remoteLink(row.origin_node, row.id, row.revision_id)
+              : recordLink(row.id, row.revision_id)
+          }
+        >
           <div className="result-main">
             <h3>{row.title}</h3>
             <p>{row.problem}</p>
             <p className="result-meta">
               {row.profile === 'software_fix' ? 'Software fix' : 'Computational method'} ·{' '}
               {row.environment.runtime === 'node' ? 'Node 24.x' : 'Synthetic research data'} ·
-              Source review · Demo
+              {row.federated ? `Origin summary · ${row.origin_label}` : 'Source review'} · Demo
             </p>
           </div>
           <span className="result-status">

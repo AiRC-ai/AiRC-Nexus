@@ -21,7 +21,7 @@ function owns(pid, role) {
   if (!Number.isInteger(pid) || !roles[role]) return false;
   const command =
     spawnSync('ps', ['-p', String(pid), '-o', 'args='], { encoding: 'utf8' }).stdout ?? '';
-  return command.includes(roles[role]);
+  return command.includes(roles[role]) && !command.includes('--nexus-instance=');
 }
 let previous = {};
 try {

@@ -2,6 +2,8 @@
 
 final result: passed
 
+This is the original v0.1 reference comparison. The v0.2 federation extension has separate [visual and interaction evidence](docs/design/federation-qa.md), including the fifth navigation destination.
+
 ## Target and state
 
 - Selected source: `docs/design/mockups/03-evidence-workbench.png` (third displayed branded option, selected by the owner).

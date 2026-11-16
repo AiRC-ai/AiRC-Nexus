@@ -14,6 +14,7 @@ export interface Assessment {
   created_at: string;
 }
 export interface Knowledge {
+  is_current: boolean;
   id: string;
   revision_id: string;
   digest: string;
@@ -35,6 +36,10 @@ export interface Knowledge {
   } | null;
 }
 export interface Result extends Content {
+  origin_node?: string;
+  origin_label?: string;
+  federated?: boolean;
+  federation?: { valid_until: string; verified_at: string; source_url: string };
   visibility: string;
   id: string;
   revision_id: string;

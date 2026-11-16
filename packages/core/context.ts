@@ -29,7 +29,7 @@ export function byteSize(value: unknown) {
 }
 export interface PackedContext {
   data: Record<string, unknown>[];
-  requires_detail: { id: string; revision_id: string }[];
+  requires_detail: { id: string; revision_id: string; origin_node?: string }[];
   truncated: boolean;
   status: string;
   demo: true;
@@ -46,6 +46,7 @@ export function packContext(
   candidates: Record<string, unknown>[],
   budget: number,
   incomplete = false,
+  priorDetails: PackedContext['requires_detail'] = [],
 ): PackedContext {
   const result: PackedContext = {
     data: [],
@@ -63,11 +64,26 @@ export function packContext(
       result.status = 'matches';
     } else {
       result.truncated = true;
-      const ref = { id: String(candidate.id), revision_id: String(candidate.revision_id) };
+      const ref = {
+        id: String(candidate.id),
+        revision_id: String(candidate.revision_id),
+        ...(candidate.origin_node ? { origin_node: String(candidate.origin_node) } : {}),
+      };
       const detailTrial = { ...result, requires_detail: [...result.requires_detail, ref] };
       measure(detailTrial);
       if (byteSize(detailTrial) <= budget - 96) result.requires_detail.push(ref);
     }
+  }
+  for (const ref of priorDetails) {
+    if (
+      result.data.some((r) => r.id === ref.id && r.origin_node === ref.origin_node) ||
+      result.requires_detail.some((r) => r.id === ref.id && r.origin_node === ref.origin_node)
+    )
+      continue;
+    const trial = { ...result, requires_detail: [...result.requires_detail, ref] };
+    measure(trial);
+    if (byteSize(trial) <= budget - 96) result.requires_detail.push(ref);
+    result.truncated = true;
   }
   if (!result.data.length && result.requires_detail.length) result.status = 'requires_detail';
   if (!result.data.length && incomplete) result.status = 'refine_query';

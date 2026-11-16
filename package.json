@@ -1,6 +1,6 @@
 {
   "name": "airc-nexus",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "type": "module",
   "description": "Local AiRC Nexus evidence-reuse prototype",
@@ -36,7 +36,12 @@
     "access:prepare": "tsx scripts/access.ts",
     "access:renew": "tsx scripts/access.ts --renew",
     "deps:inventory": "node scripts/dependency-inventory.mjs",
-    "verify:compose": "node scripts/verify-compose.mjs"
+    "verify:compose": "node scripts/verify-compose.mjs",
+    "federation:setup": "tsx scripts/federation-setup.ts",
+    "federation:start": "node scripts/federation-demo.mjs",
+    "federation:stop": "node scripts/federation-demo.mjs --stop",
+    "federation:admin": "tsx scripts/federation-admin.ts",
+    "federation:verify": "tsx evals/federation-live.ts"
   },
   "dependencies": {
     "@fastify/cookie": "11.1.5",

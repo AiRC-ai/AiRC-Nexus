@@ -1,5 +1,6 @@
 import { readFile, mkdir, writeFile } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
+import { dirname } from 'node:path';
 
 const raw = await readFile('package-lock.json', 'utf8');
 const lock = JSON.parse(raw);
@@ -14,9 +15,10 @@ const packages = Object.entries(lock.packages)
     location: path,
   }))
   .sort((a, b) => a.name.localeCompare(b.name) || a.location.localeCompare(b.location));
-await mkdir('docs/validation', { recursive: true });
+const target = process.argv[2] ?? 'docs/validation/dependencies.json';
+await mkdir(dirname(target), { recursive: true });
 await writeFile(
-  'docs/validation/dependencies.json',
+  target,
   JSON.stringify(
     {
       package_lock_sha256: createHash('sha256').update(raw).digest('hex'),

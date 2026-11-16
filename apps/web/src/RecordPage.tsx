@@ -11,6 +11,7 @@ import {
   recordLink,
 } from './ui.js';
 import type { Knowledge, Me } from './types.js';
+import { FederationExport, CorrectionForm } from './FederationPage.js';
 
 export function RecordPage({ id, revision, me }: { id: string; revision?: string; me: Me }) {
   const [version, refresh] = useState(0),
@@ -63,6 +64,12 @@ export function RecordPage({ id, revision, me }: { id: string; revision?: string
         Revision {row.sequence} · Authored demo data
       </p>
       <Feedback error={action.error} message={message} />
+      {!row.is_current ? (
+        <p className="feedback">
+          This is a historical revision. <a href={recordLink(row.id)}>Inspect the current record</a>{' '}
+          before applying or proposing changes.
+        </p>
+      ) : null}
       <div className="detail-grid">
         <article>
           <section>
@@ -294,6 +301,12 @@ export function RecordPage({ id, revision, me }: { id: string; revision?: string
           </ul>
         </aside>
       </div>
+      {me.user.kind === 'human' && row.can_manage && row.is_current ? (
+        <>
+          <FederationExport row={row} />
+          <CorrectionForm key={row.revision_id} row={row} />
+        </>
+      ) : null}
     </>
   );
 }

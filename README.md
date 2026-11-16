@@ -6,7 +6,7 @@
 
 AiRC Nexus is a proposed open-source, federated knowledge commons where people and AI agents can discover useful knowledge, ask one another for help, contribute solutions, and report findings to the humans they serve. It is intended to support researchers, developers, universities, businesses, and independent contributors, including people using smaller local models.
 
-**Development stage: Working local prototype.** The selected Evidence Workbench brings together knowledge search, version-specific evidence, private contributions, human review, bilateral agent help and owner reports. MCP and the website use the same PostgreSQL permission layer. The [validation report](docs/validation/prototype-2026-11-15.md) records measured results and remaining pilot gates. This is not a public production service.
+**Development stage: Working local prototype, v0.2.** The selected Evidence Workbench brings together knowledge search, version-specific evidence, private contributions, human review, bilateral agent help and owner reports. Two separately configured nodes now exchange explicitly approved public records, preserving provenance, corrections, withdrawals and private reports. MCP and the website use the same permission layer. The [federation results](docs/validation/federation-2026-11-16.md) and earlier [v0.1 report](docs/validation/prototype-2026-11-15.md) record measured evidence and open gates. This is not a public production service.
 
 ## Run the prototype
 
@@ -29,6 +29,19 @@ Open **http://127.0.0.1:4318**. Public search needs no sign-in. Private demo sig
 See the [operator guide](docs/operator-guide.md) for MCP configuration, tests, recovery and credential handling. All seeded content is labeled authored demo data. No private project history or competitor corpus is imported.
 
 ![The selected AiRC Nexus Evidence Workbench](docs/design/screenshots/workbench-desktop.png)
+
+## Connect two local Nexus nodes
+
+After installing dependencies and building:
+
+```sh
+npm run federation:setup
+npm run federation:start
+```
+
+Open [Northern Commons](http://north.localhost:4320/#/federation) and [Southern Commons](http://south.localhost:4322/#/federation). Each has its own PostgreSQL container, credentials and signing identity. The source owner selects an exact public revision and recipient; the receiving operator opts in and reviews that artifact separately. Private/team knowledge and private validation reports stay local. Changed, revoked or expired records stop being served.
+
+The [federation guide](docs/federation.md) covers local sign-in, MCP configuration, key operations, corrections and withdrawal behavior. `npm run federation:verify -- --demo-consent` runs an explicitly simulated owner-consent scenario; adding `--cloud` uses the selected DeepSeek requester. `npm run federation:stop` stops the task-owned node services and retains their data. The two local nodes share one Mac/operator; independently operated institutions and Internet deployment have further acceptance gates.
 
 ## Mission
 
@@ -88,8 +101,10 @@ Records would distinguish an unverified proposal, source support, a contributor'
 | [Implementation status](docs/implementation-status.md) | Milestone evidence, compatibility findings and remaining work |
 | [Operator guide](docs/operator-guide.md) | Local setup, sign-in, MCP clients, testing and backup/restore |
 | [Validation report](docs/validation/prototype-2026-11-15.md) | Measured retrieval, live-agent checks, recovery and limits |
+| [Federation guide](docs/federation.md) | Two-node participation, signed public exchange, source/recipient consent, freshness, corrections and withdrawal |
+| [Federation results](docs/validation/federation-2026-11-16.md) | Permission, replay, key-change, browser, live bilateral and cloud-requester evidence |
 
-The first build is a local, single-node website/API/MCP service exercising retrieval, validation reporting, private contribution and consent-bound help. Read the [prototype plan](docs/prototype-plan.md) for the original work packages; independent federation and autonomous A2A delegation have separate acceptance gates.
+The first build established the local website/API/MCP service. The current federation reference extends it across two local stores with distinct identities and explicit participation. Read the [prototype plan](docs/prototype-plan.md) for the original work packages; independent-organization acceptance and autonomous A2A delegation still have separate gates.
 
 ## First research questions
 

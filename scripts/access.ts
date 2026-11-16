@@ -1,6 +1,6 @@
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
-import { resolve } from 'node:path';
+import { resolve, dirname } from 'node:path';
 import { randomBytes } from 'node:crypto';
 import { loadConfig } from '../packages/core/config.js';
 import { createPool, tokenHash } from '../packages/db/index.js';
@@ -8,7 +8,10 @@ import { IDS } from '../fixtures/records.js';
 import type { Access } from './seed.js';
 
 const config = await loadConfig();
-const access = JSON.parse(await readFile('.nexus/access.json', 'utf8')) as Access;
+const root = process.env.NEXUS_CONFIG_FILE
+  ? dirname(resolve(process.env.NEXUS_CONFIG_FILE))
+  : resolve('.nexus');
+const access = JSON.parse(await readFile(resolve(root, 'access.json'), 'utf8')) as Access;
 if (process.argv.includes('--renew')) {
   const pool = createPool(config.admin_url);
   const db = await pool.connect();
@@ -43,7 +46,9 @@ if (process.argv.includes('--renew')) {
         [tokenHash(access[key]), id, ['read', 'draft', 'outcome']],
       );
     }
-    await writeFile('.nexus/access.json', JSON.stringify(access, null, 2) + '\n', { mode: 0o600 });
+    await writeFile(resolve(root, 'access.json'), JSON.stringify(access, null, 2) + '\n', {
+      mode: 0o600,
+    });
     await db.query('COMMIT');
   } catch (error) {
     await db.query('ROLLBACK');
@@ -53,14 +58,14 @@ if (process.argv.includes('--renew')) {
     await pool.end();
   }
 }
-await mkdir('.nexus/secrets', { recursive: true, mode: 0o700 });
+await mkdir(resolve(root, 'secrets'), { recursive: true, mode: 0o700 });
 const pinned = resolve('.nexus/runtime/node-v24.22.3-darwin-arm64/bin/node');
 const clients: Record<string, unknown> = {};
 for (const [name, key] of [
   ['alex', 'alice_agent'],
   ['morgan', 'bob_agent'],
 ] as const) {
-  const tokenFile = resolve(`.nexus/secrets/${name}-agent.token`);
+  const tokenFile = resolve(root, `secrets/${name}-agent.token`);
   await writeFile(tokenFile, access[key], { mode: 0o600 });
   clients[`nexus-${name}`] = {
     command: existsSync(pinned) ? pinned : process.execPath,
@@ -68,9 +73,21 @@ for (const [name, key] of [
     env: { NEXUS_URL: `http://127.0.0.1:${config.port}`, NEXUS_TOKEN_FILE: tokenFile },
   };
 }
-await writeFile('.nexus/mcp-config.json', JSON.stringify({ mcpServers: clients }, null, 2) + '\n', {
-  mode: 0o600,
-});
+await writeFile(
+  resolve(root, 'mcp-config.json'),
+  JSON.stringify({ mcpServers: clients }, null, 2) + '\n',
+  {
+    mode: 0o600,
+  },
+);
+if (existsSync(resolve(root, 'identity.json'))) {
+  const identity = JSON.parse(await readFile(resolve(root, 'identity.json'), 'utf8'));
+  await writeFile(
+    resolve(root, 'agent.token'),
+    identity.operator_id === IDS.alice ? access.alice_agent : access.bob_agent,
+    { mode: 0o600 },
+  );
+}
 console.log(
-  'Prepared local MCP configurations in .nexus/mcp-config.json; tokens stay in private files. Human sign-in codes are in .nexus/access.json. No host configuration was changed.',
+  'Prepared local credential and MCP files in the selected state directory. No host configuration was changed.',
 );

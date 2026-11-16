@@ -9,6 +9,8 @@ import { ActivityPage } from './ActivityPage.js';
 import type { Me } from './types.js';
 import { Search, ArrowLeftRight, Layers, Activity, UserRound, LogOut } from 'lucide-react';
 import { InquiryPage } from './InquiryPage.js';
+import { FederationPage, ImportedRecordPage, NodeBadge } from './FederationPage.js';
+import { Network } from 'lucide-react';
 
 function useSession() {
   const [state, setState] = useState<{ data: Me | null; error: Error | null; busy: boolean }>({
@@ -118,7 +120,19 @@ function Workspace({ route, me, onSignIn }: { route: string; me: Me; onSignIn: (
   const [path, query] = route.split('?');
   const segments = (path ?? '').split('/').filter(Boolean);
   let content;
-  if (segments[0] === 'record' && segments[1]) {
+  if (segments[0] === 'federation') content = <FederationPage me={me} onSignIn={onSignIn} />;
+  else if (segments[0] === 'shared' && segments[1] && segments[2]) {
+    const revision = new URLSearchParams(query ?? '').get('revision');
+    content = (
+      <ImportedRecordPage
+        key={`${segments[1]}:${segments[2]}:${revision ?? 'head'}`}
+        peer={segments[1]}
+        id={segments[2]}
+        {...(revision ? { revision } : {})}
+        me={me}
+      />
+    );
+  } else if (segments[0] === 'record' && segments[1]) {
     const revision = new URLSearchParams(query ?? '').get('revision');
     content = (
       <RecordPage
@@ -169,6 +183,7 @@ export function App() {
             { key: 'help', label: 'Help exchange', href: '/help', Icon: ArrowLeftRight },
             { key: 'contributions', label: 'Contributions', href: '/contributions', Icon: Layers },
             { key: 'activity', label: 'Activity', href: '/activity', Icon: Activity },
+            { key: 'federation', label: 'Shared nodes', href: '/federation', Icon: Network },
           ].map(({ key, label, href, Icon }) => (
             <a
               key={key}
@@ -210,7 +225,10 @@ export function App() {
         </div>
       </header>
       <main className="workbench-main" id="main-content" tabIndex={-1}>
-        <div className="workbench-note">Local prototype · Authored demo knowledge</div>
+        <div className="workbench-note">
+          Local prototype · Authored demo knowledge
+          <NodeBadge />
+        </div>
         {session.busy ? (
           <Loading />
         ) : session.data ? (

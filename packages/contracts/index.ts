@@ -63,11 +63,13 @@ export const SearchSchema = z
     budget_bytes: z.coerce.number().int().min(512).max(32_000).default(12_000),
     include_unknown: z.boolean().default(false),
     show_disputed: z.boolean().default(false),
+    include_federated: z.boolean().default(false),
   })
   .strict();
 export const EvidenceOutcomeSchema = z.enum(['not_run', 'passed', 'failed', 'inconclusive']);
 export const OutcomeSchema = z
   .object({
+    origin_node: z.uuid().optional(),
     record_id: z.uuid(),
     revision_id: z.uuid(),
     outcome: EvidenceOutcomeSchema,

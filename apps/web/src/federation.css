@@ -1,0 +1,85 @@
+.node-badge {
+  color: var(--ink-muted, #526475);
+}
+.network-peers {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr));
+  gap: 1.25rem;
+  margin: 1.8rem 0 2.5rem;
+}
+.network-card {
+  border: 1px solid #aab7bf;
+  border-radius: 4px;
+  padding: clamp(1.1rem, 3vw, 2rem);
+  margin: 1.5rem 0;
+  overflow-wrap: anywhere;
+}
+.network-card h2,
+.network-card h3 {
+  margin-top: 0;
+}
+.network-card h3 {
+  font-family: 'Source Serif 4 Variable', Georgia, serif;
+  font-size: clamp(1.6rem, 2.5vw, 2rem);
+  line-height: 1.22;
+}
+.network-card .eyebrow {
+  font-family: 'Inter Variable', sans-serif;
+  font-size: 0.83rem;
+  text-transform: uppercase;
+  letter-spacing: 0.055em;
+  color: #466173;
+}
+.network-card p,
+.network-card li {
+  line-height: 1.6;
+}
+.network-card .solution {
+  margin: 1.2rem 0;
+}
+.network-card .consent {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.8rem;
+  margin: 1.5rem 0 1rem;
+  font-size: 1rem;
+}
+.network-card .consent input {
+  flex: 0 0 auto;
+  margin-top: 0.3rem;
+  width: 1.2rem;
+  height: 1.2rem;
+}
+.network-card .field {
+  margin: 1rem 0;
+}
+.network-card .primary {
+  max-width: 100%;
+  font-size: 1rem;
+  padding: 0.9rem 1.3rem;
+  white-space: normal;
+}
+.network-card .source-list {
+  font-size: 0.85rem;
+}
+.network-card summary {
+  font-size: 1.2rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.network-peers .network-card {
+  margin: 0;
+}
+.activity-list {
+  padding-left: 1.4rem;
+  line-height: 1.8;
+}
+@media (max-width: 700px) {
+  .node-badge {
+    display: block;
+    margin-top: 0.3rem;
+  }
+  .network-card {
+    padding: 1rem;
+  }
+}

@@ -2,7 +2,15 @@
 
 Started November 15, 2026. Scope: local v0.1 from the [prototype plan](prototype-plan.md). These milestones track observed implementation evidence; the planned model benchmark and production/federation gates remain separate.
 
-## Current plan
+## Federation extension — November 16
+
+The v0.2 local reference is running as **Northern Commons** and **Southern Commons**, with separate PostgreSQL containers, node keys and operator/agent credentials. Public export is a source-owner decision bound to the current revision and selected peer. A recipient separately enables imports and approves the full artifact. Imported records retain their origin and source-reported evidence; private/team records and private requester outcomes remain local.
+
+**42 unit/integration checks and six browser journeys passed.** The live separate-process scenario passed in both directions, including consent revocation, receiver opt-out, source outage/restart, correction/reapproval, withdrawal and private MCP reporting. The observed safety-change propagation phases were about five seconds, under the declared 30-second lease cap. A selected DeepSeek cloud requester found/read the exact federated reference and preserved its unverified scope using 5,866 input and 821 output tokens.
+
+See the [federation guide](federation.md), [results](validation/federation-2026-11-16.md) and [visual QA](design/federation-qa.md). This is one Mac/operator, not independent institutional federation, public hosting or scientific replication. The sections below preserve the original v0.1 milestones and evidence.
+
+## v0.1 plan
 
 | Milestone | State | Evidence |
 | --- | --- | --- |
@@ -25,9 +33,9 @@ Started November 15, 2026. Scope: local v0.1 from the [prototype plan](prototype
 
 Runtime evidence containing local configuration stays in ignored `.nexus/`. Do not commit credentials, browser sessions, database files or full host tool inventories.
 
-## Current verification
+## v0.1 baseline verification
 
-The current **29 unit/integration checks and four browser journeys passed**. The integration set includes storage/lifecycle, HTTP boundaries/session handling, database-backed MCP, protocol negotiation, mapping previews, bilateral help consent, bounded context/screening, natural-language regression, set-based read-policy equivalence and actual Node-client recovery after an idle backend is terminated. Fresh task-owned test databases are removed afterward. Eight migrations apply both fresh and incrementally against PostgreSQL 18.7.
+The v0.1 baseline **29 unit/integration checks and four browser journeys passed**. The integration set includes storage/lifecycle, HTTP boundaries/session handling, database-backed MCP, protocol negotiation, mapping previews, bilateral help consent, bounded context/screening, natural-language regression, set-based read-policy equivalence and actual Node-client recovery after an idle backend is terminated. Fresh task-owned test databases are removed afterward. Eight migrations apply both fresh and incrementally against PostgreSQL 18.7.
 
 The owner chose **Option 3, Evidence Workbench**, using the supplied AiRC circuit-A logo, navy/cyan identity, Inter controls and Source Serif 4 reading typography. Desktop and narrow captures, real MathML, separate sharing/revocation and selected-tag automated accessibility checks passed. See the root [design QA](../design-qa.md).
 

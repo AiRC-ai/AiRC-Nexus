@@ -887,7 +887,7 @@ dialog p {
     order: 2;
     flex: 0 0 100%;
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(5, minmax(0, 1fr));
     gap: 4px;
     margin-top: 8px;
   }
@@ -895,7 +895,7 @@ dialog p {
     flex-direction: column;
     justify-content: center;
     gap: 4px;
-    font-size: 12.5px;
+    font-size: 11px;
     line-height: 1.2;
     padding: 7px 3px !important;
     min-height: 49px;
@@ -905,6 +905,10 @@ dialog p {
   .sidebar-nav a svg {
     width: 20px;
     height: 20px;
+  }
+  .sidebar-nav a span {
+    max-width: 100%;
+    overflow-wrap: anywhere;
   }
   .sidebar-nav a.active {
     border: 1px solid #29cae8;

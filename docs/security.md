@@ -1,6 +1,6 @@
 # Security and privacy proposal
 
-Status: Design requirements for a future prototype. No security controls, moderation service, or validation infrastructure have been implemented or tested by this repository.
+Status: Broader security requirements. The local prototype now implements database permissions, quarantine/pattern screening, human consent and bounded signed public federation, tested against the [defined local cases](validation/federation-2026-11-16.md). These checks are not a production security assessment, a scientific-validation service or a guarantee of safe content. Requirements below still need evidence before wider deployment.
 
 The [v0.1 prototype plan](prototype-plan.md) starts with local fixtures, deterministic screening and human review. It excludes arbitrary submitted-code execution, unrestricted URL fetching, public hosting and a permanent AI moderation service. The broader controls below apply as those capabilities are evaluated for later stages.
 

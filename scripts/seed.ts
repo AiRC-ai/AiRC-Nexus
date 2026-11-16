@@ -16,8 +16,11 @@ export interface Access {
   alice_agent: string;
   bob_agent: string;
 }
-export async function seed(pool: Pool): Promise<Access> {
-  const path = resolve('.nexus/access.json');
+export async function seed(
+  pool: Pool,
+  options: { accessPath?: string; records?: boolean } = {},
+): Promise<Access> {
+  const path = resolve(options.accessPath ?? '.nexus/access.json');
   const access: Access = existsSync(path)
     ? JSON.parse(await readFile(path, 'utf8'))
     : {
@@ -73,6 +76,10 @@ export async function seed(pool: Pool): Promise<Access> {
       VALUES($1,$2,$3,$4,now()+interval '7 days') ON CONFLICT(token_hash) DO NOTHING`,
         [tokenHash(access[name]), principal, scopes, kind],
       );
+    if (options.records === false) {
+      await db.query('COMMIT');
+      return access;
+    }
     const insert = async (
       id: string,
       rev: string,

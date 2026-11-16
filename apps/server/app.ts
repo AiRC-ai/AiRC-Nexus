@@ -12,13 +12,24 @@ import { NexusError } from '../../packages/core/errors.js';
 import { HelpExchange } from '../../packages/core/help.js';
 import { ANONYMOUS, type Principal } from '../../packages/contracts/index.js';
 import { authenticate, tokenHash, withActor, type Pool } from '../../packages/db/index.js';
+import { Federation } from '../../packages/federation/service.js';
+import { SearchSchema } from '../../packages/contracts/index.js';
+import { packContext } from '../../packages/core/context.js';
 
 declare module 'fastify' {
   interface FastifyRequest {
     principal: Principal;
   }
 }
-export async function buildApp(pool: Pool, options: { port?: number; staticRoot?: string } = {}) {
+export async function buildApp(
+  pool: Pool,
+  options: {
+    port?: number;
+    staticRoot?: string;
+    federation?: Federation;
+    browserHost?: string;
+  } = {},
+) {
   const app = Fastify({
     logger: false,
     bodyLimit: 65_536,
@@ -27,6 +38,14 @@ export async function buildApp(pool: Pool, options: { port?: number; staticRoot?
   });
   const store = new Store(pool);
   const help = new HelpExchange(pool);
+  const federation = options.federation;
+  const browserHost = options.browserHost
+    ? z.enum(['north.localhost', 'south.localhost']).parse(options.browserHost)
+    : undefined;
+  const sessionCookie = federation
+    ? `nexus_${federation.identity.node_id.replaceAll('-', '')}`
+    : 'nexus_session';
+  if (federation) await federation.ready();
   await app.register(cookie);
   await app.register(helmet, {
     contentSecurityPolicy: {
@@ -49,21 +68,36 @@ export async function buildApp(pool: Pool, options: { port?: number; staticRoot?
     const address = app.server.address();
     const port = address && typeof address === 'object' ? address.port : (options.port ?? 4318);
     const host = request.headers.host;
-    if (host !== `127.0.0.1:${port}` && host !== `localhost:${port}`)
+    if (
+      host !== `127.0.0.1:${port}` &&
+      host !== `localhost:${port}` &&
+      (!browserHost || host !== `${browserHost}:${port}`)
+    )
       throw new NexusError('invalid_host', 403);
+    if (browserHost && host !== `${browserHost}:${port}`) {
+      if (request.url.startsWith('/api/auth/'))
+        throw new NexusError('canonical_browser_host_required', 403);
+      if (
+        !request.url.startsWith('/api/') &&
+        !request.url.startsWith('/health') &&
+        ['GET', 'HEAD'].includes(request.method)
+      )
+        return reply.redirect(`http://${browserHost}:${port}${request.url}`);
+    }
     if (request.url.startsWith('/api/')) reply.header('Cache-Control', 'no-store');
     if (!['GET', 'HEAD', 'OPTIONS'].includes(request.method)) {
       const origin = request.headers.origin;
       const browserMutation =
-        !!request.cookies.nexus_session || request.url.startsWith('/api/auth/');
+        !!request.cookies[sessionCookie] || request.url.startsWith('/api/auth/');
       if ((browserMutation || origin) && origin !== `http://${host}`)
         throw new NexusError('invalid_origin', 403);
     }
     if (request.url.startsWith('/api/auth/')) return;
+    if (request.url.split('?')[0] === '/api/federation/v1/snapshot') return;
     const bearer = request.headers.authorization;
     if (bearer && !/^Bearer [A-Za-z0-9_-]{8,256}$/.test(bearer))
       throw new NexusError('invalid_credential', 401);
-    const token = bearer?.slice(7) ?? request.cookies.nexus_session;
+    const token = bearer?.slice(7) ?? request.cookies[sessionCookie];
     const actor = await authenticate(pool, token);
     if (!actor) throw new NexusError('invalid_credential', 401);
     request.principal = actor;
@@ -94,14 +128,26 @@ export async function buildApp(pool: Pool, options: { port?: number; staticRoot?
     if (
       request.principal.kind !== 'human' ||
       request.headers.authorization ||
-      !request.cookies.nexus_session
+      !request.cookies[sessionCookie]
     )
       throw new NexusError('human_session_required', 403);
   };
   app.get('/health', async () => {
     await pool.query('SELECT 1');
-    return { status: 'ok', mode: 'local-demo', version: '0.1.0' };
+    if (federation) await federation.ready();
+    return { status: 'ok', mode: 'local-demo', version: '0.2.0' };
   });
+  app.get('/api/v1/node', () =>
+    federation
+      ? {
+          enabled: true,
+          node_id: federation.identity.node_id,
+          label: federation.identity.label,
+          key_id: federation.identity.key_id,
+          demo: true,
+        }
+      : { enabled: false, demo: true },
+  );
   app.post(
     '/api/auth/exchange',
     { config: { rateLimit: { max: 10, timeWindow: '1 minute' } } },
@@ -116,7 +162,7 @@ export async function buildApp(pool: Pool, options: { port?: number; staticRoot?
         tokenHash(token),
       ]);
       if (!r.rows[0].accepted) throw new NexusError('invalid_sign_in_code', 401);
-      reply.setCookie('nexus_session', token, {
+      reply.setCookie(sessionCookie, token, {
         httpOnly: true,
         sameSite: 'strict',
         secure: false,
@@ -127,11 +173,11 @@ export async function buildApp(pool: Pool, options: { port?: number; staticRoot?
     },
   );
   app.post('/api/auth/logout', async (request, reply) => {
-    if (request.cookies.nexus_session)
+    if (request.cookies[sessionCookie])
       await pool.query('SELECT nexus.revoke_session($1)', [
-        tokenHash(request.cookies.nexus_session),
+        tokenHash(request.cookies[sessionCookie]!),
       ]);
-    reply.clearCookie('nexus_session', { path: '/' });
+    reply.clearCookie(sessionCookie, { path: '/' });
     return { signed_out: true };
   });
   app.get('/api/me', async (request) => ({
@@ -159,6 +205,7 @@ export async function buildApp(pool: Pool, options: { port?: number; staticRoot?
         budget_bytes: z.string().optional(),
         include_unknown: z.enum(['true', 'false']).optional(),
         show_disputed: z.enum(['true', 'false']).optional(),
+        include_federated: z.enum(['true', 'false']).optional(),
       })
       .strict()
       .parse(request.query);
@@ -168,7 +215,7 @@ export async function buildApp(pool: Pool, options: { port?: number; staticRoot?
     } catch {
       throw new NexusError('invalid_environment');
     }
-    return store.search(request.principal, {
+    const input = SearchSchema.parse({
       query: q.query ?? '',
       environment,
       ...(q.profile ? { profile: q.profile } : {}),
@@ -176,7 +223,17 @@ export async function buildApp(pool: Pool, options: { port?: number; staticRoot?
       ...(q.budget_bytes ? { budget_bytes: q.budget_bytes } : {}),
       include_unknown: q.include_unknown === 'true',
       show_disputed: q.show_disputed === 'true',
+      include_federated: q.include_federated === 'true',
     });
+    const local = await store.search(request.principal, input);
+    if (!input.include_federated || !federation) return local;
+    const remote = await federation.search(request.principal, input);
+    const candidates = [...local.data, ...remote]
+      .sort(
+        (a, b) => Number(b.retrieval === 'strict_terms') - Number(a.retrieval === 'strict_terms'),
+      )
+      .slice(0, input.limit);
+    return packContext(candidates, input.budget_bytes, local.truncated, local.requires_detail);
   });
   app.get<{ Params: { id: string }; Querystring: { revision?: string } }>(
     '/api/v1/records/:id',
@@ -208,13 +265,29 @@ export async function buildApp(pool: Pool, options: { port?: number; staticRoot?
       String(request.headers['idempotency-key'] ?? ''),
     );
   });
-  app.post('/api/v1/outcomes', (request) =>
-    store.reportOutcome(
+  app.post('/api/v1/outcomes', (request) => {
+    if (request.body && typeof request.body === 'object' && 'origin_node' in request.body) {
+      if (!federation) throw new NexusError('not_found', 404);
+      if (request.body.origin_node === federation.identity.node_id) {
+        const { origin_node: _, ...native } = request.body;
+        return store.reportOutcome(
+          request.principal,
+          native,
+          String(request.headers['idempotency-key'] ?? ''),
+        );
+      }
+      return federation.reportOutcome(
+        request.principal,
+        request.body,
+        String(request.headers['idempotency-key'] ?? ''),
+      );
+    }
+    return store.reportOutcome(
       request.principal,
       request.body,
       String(request.headers['idempotency-key'] ?? ''),
-    ),
-  );
+    );
+  });
   app.get('/api/v1/activity', async (request) => {
     const [activity, exchange] = await Promise.all([
       store.activity(request.principal),
@@ -260,6 +333,39 @@ export async function buildApp(pool: Pool, options: { port?: number; staticRoot?
     browserHuman(request);
     return store.withdraw(request.principal, request.params.id);
   });
+  app.get('/api/v1/federation', (request) =>
+    federation ? federation.status(request.principal) : { enabled: false, demo: true },
+  );
+  if (federation) {
+    app.post('/api/federation/v1/snapshot', (request) => federation.snapshot(request.body));
+    app.get<{ Params: { peer: string; id: string }; Querystring: { revision?: string } }>(
+      '/api/v1/federation/records/:peer/:id',
+      (request) =>
+        request.params.peer === federation.identity.node_id
+          ? store.get(request.principal, request.params.id, request.query.revision)
+          : federation.get(
+              request.principal,
+              request.params.peer,
+              request.params.id,
+              request.query.revision,
+            ),
+    );
+    app.get<{ Params: { id: string } }>('/api/v1/federation/exports/:id', (request) =>
+      federation.grants(request.principal, request.params.id),
+    );
+    app.post('/api/v1/federation/exports', (request) => {
+      browserHuman(request);
+      return federation.grant(request.principal, request.body);
+    });
+    app.post('/api/v1/federation/peer-consent', (request) => {
+      browserHuman(request);
+      return federation.peerConsent(request.principal, request.body);
+    });
+    app.post('/api/v1/federation/approvals', (request) => {
+      browserHuman(request);
+      return federation.approve(request.principal, request.body);
+    });
+  }
   const staticRoot = options.staticRoot ?? resolve('apps/web/dist');
   if (existsSync(staticRoot)) {
     await app.register(staticFiles, { root: staticRoot });

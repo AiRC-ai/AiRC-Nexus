@@ -20,6 +20,8 @@ const explanations: Record<string, string> = {
   idempotency_conflict:
     'The retry does not match the original request. Review your changes and try again.',
   sharing_precondition: 'This question changed or cannot be shared in its current state.',
+  federation_review_precondition:
+    'Refresh this reference before approving. Its exact content must be current, unchanged and pass screening.',
 };
 export class ApiError extends Error {
   constructor(public code: string) {

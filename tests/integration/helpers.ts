@@ -5,7 +5,7 @@ import { Store } from '../../packages/core/store.js';
 import { migrate } from '../../scripts/migrate.js';
 import { randomBytes } from 'node:crypto';
 
-export async function testContext() {
+export async function testContext(options: { accessPath?: string; records?: boolean } = {}) {
   const config = await loadConfig();
   const management = createPool(config.admin_url);
   const database = `nexus_test_${process.pid}_${randomBytes(4).toString('hex')}`;
@@ -17,9 +17,10 @@ export async function testContext() {
   };
   const admin = createPool(url(config.admin_url)),
     app = createPool(url(config.app_url)),
-    worker = createPool(url(config.worker_url));
+    worker = createPool(url(config.worker_url)),
+    federation = createPool(url(config.federation_url));
   await migrate(admin);
-  const access = await seed(admin);
+  const access = await seed(admin, options);
   const alice = await authenticate(app, access.alice_agent),
     bob = await authenticate(app, access.bob_agent);
   if (!alice || !bob) throw new Error('Fixture authentication failed');
@@ -36,13 +37,14 @@ export async function testContext() {
     admin,
     app,
     worker,
+    federation,
     access,
     alice,
     bob,
     owner,
     store: new Store(app),
     close: async () => {
-      await Promise.all([admin.end(), app.end(), worker.end()]);
+      await Promise.all([admin.end(), app.end(), worker.end(), federation.end()]);
       await management.query(`DROP DATABASE ${database} WITH (FORCE)`);
       await management.end();
     },

@@ -34,8 +34,9 @@ type Row = {
   can_review: boolean;
   assessments?: unknown[];
   strict_match?: boolean;
+  is_current?: boolean;
 };
-const revisionFields = `r.id,r.origin_node,r.state,r.visibility,v.id AS revision_id,v.sequence,v.content,v.digest,v.created_at,
+const revisionFields = `r.id,r.origin_node,r.state,r.visibility,v.id AS revision_id,v.sequence,v.content,v.digest,v.created_at,v.id=r.current_revision_id AS is_current,
   nexus.owns_record(r.id) AS can_manage,nexus.can_review(v.id) AS can_review`;
 const revisionFrom = `FROM nexus.records r JOIN nexus.record_revisions v ON v.record_id=r.id`;
 const selectRevision = `SELECT ${revisionFields} ${revisionFrom}`;
@@ -191,6 +192,10 @@ export class Store {
       await this.audit(db, actor, 'viewed', row);
       return {
         ...row,
+        revision_status: row.is_current ? 'current' : 'historical',
+        retrieval_limitations: row.is_current
+          ? []
+          : ['Historical revision; inspect the current record before applying this method.'],
         assessments: assessments.rows,
         assessment_counts: assessmentCounts.rows,
         assessments_truncated: assessmentCounts.rows.reduce((n, r) => n + r.count, 0) > 100,
@@ -205,11 +210,10 @@ export class Store {
     const id = existingId ?? randomUUID();
     const revisionId = randomUUID();
     if (!existingId)
-      await db.query('INSERT INTO nexus.records(id,owner_id,team_id) VALUES($1,$2,$3)', [
-        id,
-        actor.owner_id,
-        draft.team_id ?? null,
-      ]);
+      await db.query(
+        "INSERT INTO nexus.records(id,owner_id,team_id,origin_node) VALUES($1,$2,$3,coalesce((SELECT node_id::text FROM nexus.federation_identity),'nexus-local-demo'))",
+        [id, actor.owner_id, draft.team_id ?? null],
+      );
     else {
       const r = await db.query(
         'SELECT id FROM nexus.records WHERE id=$1 AND nexus.owns_record(id) FOR UPDATE',
@@ -289,6 +293,7 @@ export class Store {
   async reportOutcome(actor: Principal, input: unknown, key: string) {
     this.scope(actor, 'outcome');
     const body = OutcomeSchema.parse(input);
+    if (body.origin_node) throw new NexusError('federated_outcome_route_required');
     return withActor(this.pool, actor, (db) =>
       this.idempotent(db, actor, 'outcome', key, body, async () => {
         const allowed = await db.query(

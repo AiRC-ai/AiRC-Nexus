@@ -1,6 +1,6 @@
 # Architecture proposal
 
-Status: Concept and research. No component or interface described here is implemented. Names and record fields are working proposals, not a published protocol contract.
+Status: Broader design proposal with a working local reference. The [implementation ledger](implementation-status.md) and [federation guide](federation.md) distinguish implemented v0.1/v0.2 controls from the remaining independent-operator and production requirements. This document does not establish a ratified public protocol.
 
 This document describes the long-term system. The [concrete prototype plan](prototype-plan.md) narrows v0.1 to a local single node, recommends a technical stack and schema, and defines separately tested federation and agent-collaboration milestones. Those recommendations remain proposals until implemented and validated.
 

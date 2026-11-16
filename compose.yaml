@@ -17,7 +17,7 @@ services:
       retries: 30
   app:
     build: .
-    image: ${NEXUS_COMPOSE_PROJECT:-airc-nexus-local}:0.1.0
+    image: ${NEXUS_COMPOSE_PROJECT:-airc-nexus-local}:0.2.0
     depends_on:
       database: { condition: service_healthy }
     environment:
@@ -45,7 +45,7 @@ services:
       timeout: 2s
       retries: 20
   worker:
-    image: ${NEXUS_COMPOSE_PROJECT:-airc-nexus-local}:0.1.0
+    image: ${NEXUS_COMPOSE_PROJECT:-airc-nexus-local}:0.2.0
     command: [node, dist/apps/worker/main.js]
     depends_on:
       database: { condition: service_healthy }
@@ -61,7 +61,7 @@ services:
     mem_limit: 384m
   init:
     profiles: [tools]
-    image: ${NEXUS_COMPOSE_PROJECT:-airc-nexus-local}:0.1.0
+    image: ${NEXUS_COMPOSE_PROJECT:-airc-nexus-local}:0.2.0
     command: [node, dist/scripts/compose-init.js]
     user: '${NEXUS_OPERATOR_UID:-1000}:${NEXUS_OPERATOR_GID:-1000}'
     depends_on:
