@@ -1,0 +1,15 @@
+# macOS metadata
+.DS_Store
+._*
+
+# Local credentials and environment overrides
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p8
+
+# Local editor state
+.idea/
+.vscode/
