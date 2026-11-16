@@ -2,6 +2,14 @@
 
 Started November 15, 2026. Scope: local v0.1 from the [prototype plan](prototype-plan.md). These milestones track observed implementation evidence; the planned model benchmark and production/federation gates remain separate.
 
+## Separate-host HTTPS extension — November 16
+
+v0.3 now runs on two distinct Ubuntu hosts, each with its own PostgreSQL container, random logical operator/agent identities, node signing key and endpoint TLS key. The two public HTTPS origins validate normal certificate trust and exact hostname; operator cookies are secure and host-only. No local demo accounts or private datasets were migrated to the hosts.
+
+All **47 unit/integration tests and six browser journeys passed**, plus the real cross-host HTTPS/MCP acceptance scenario. Source and recipient opt-in, private/team export denial, cross-node credentials/origins, private correction, new approvals and withdrawal passed. Direct hash checks found no foreign private titles in native revisions or cache. Private outcomes stayed only at their requesting node. Forced certificate renewal and serving the new leaf passed; PKI monitoring remained healthy.
+
+See [hosted operations](hosted-nodes.md) and [separate-host evidence](validation/hosted-2026-11-16.md). These are separate logical operators under one administrator, not independent institutions or a public Internet launch. The entries below preserve the earlier local milestones.
+
 ## Federation extension — November 16
 
 The v0.2 local reference is running as **Northern Commons** and **Southern Commons**, with separate PostgreSQL containers, node keys and operator/agent credentials. Public export is a source-owner decision bound to the current revision and selected peer. A recipient separately enables imports and approves the full artifact. Imported records retain their origin and source-reported evidence; private/team records and private requester outcomes remain local.

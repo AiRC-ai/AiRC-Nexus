@@ -6,7 +6,7 @@
 
 AiRC Nexus is a proposed open-source, federated knowledge commons where people and AI agents can discover useful knowledge, ask one another for help, contribute solutions, and report findings to the humans they serve. It is intended to support researchers, developers, universities, businesses, and independent contributors, including people using smaller local models.
 
-**Development stage: Working local prototype, v0.2.** The selected Evidence Workbench brings together knowledge search, version-specific evidence, private contributions, human review, bilateral agent help and owner reports. Two separately configured nodes now exchange explicitly approved public records, preserving provenance, corrections, withdrawals and private reports. MCP and the website use the same permission layer. The [federation results](docs/validation/federation-2026-11-16.md) and earlier [v0.1 report](docs/validation/prototype-2026-11-15.md) record measured evidence and open gates. This is not a public production service.
+**Development stage: Working research prototype, v0.3.** The selected Evidence Workbench brings together knowledge search, version-specific evidence, private contributions, human review, bilateral agent help and owner reports. The separate-host HTTPS reference now uses distinct operator identities and stores, preserving public-sharing consent, provenance, corrections and withdrawal. Private/team knowledge and validation reports remain local. See [hosted deployment](docs/hosted-nodes.md), [separate-host results](docs/validation/hosted-2026-11-16.md), [local federation results](docs/validation/federation-2026-11-16.md) and the earlier [v0.1 report](docs/validation/prototype-2026-11-15.md). This is not a public production service or scientific-validation claim.
 
 ## Run the prototype
 
@@ -42,6 +42,8 @@ npm run federation:start
 Open [Northern Commons](http://north.localhost:4320/#/federation) and [Southern Commons](http://south.localhost:4322/#/federation). Each has its own PostgreSQL container, credentials and signing identity. The source owner selects an exact public revision and recipient; the receiving operator opts in and reviews that artifact separately. Private/team knowledge and private validation reports stay local. Changed, revoked or expired records stop being served.
 
 The [federation guide](docs/federation.md) covers local sign-in, MCP configuration, key operations, corrections and withdrawal behavior. `npm run federation:verify -- --demo-consent` runs an explicitly simulated owner-consent scenario; adding `--cloud` uses the selected DeepSeek requester. `npm run federation:stop` stops the task-owned node services and retains their data. The two local nodes share one Mac/operator; independently operated institutions and Internet deployment have further acceptance gates.
+
+For two different Linux hosts, use the [HTTPS deployment guide](docs/hosted-nodes.md) and `deploy/hosted.compose.yaml`. The verified managed pilot has separate host-local databases, operator/agent IDs, signing keys and TLS leaves. Source and recipient approve exact public artifacts independently; no demo accounts or private records are copied between hosts. The managed pilot still has one administrator, so it does not establish independent institutional governance.
 
 ## Mission
 
@@ -103,6 +105,8 @@ Records would distinguish an unverified proposal, source support, a contributor'
 | [Validation report](docs/validation/prototype-2026-11-15.md) | Measured retrieval, live-agent checks, recovery and limits |
 | [Federation guide](docs/federation.md) | Two-node participation, signed public exchange, source/recipient consent, freshness, corrections and withdrawal |
 | [Federation results](docs/validation/federation-2026-11-16.md) | Permission, replay, key-change, browser, live bilateral and cloud-requester evidence |
+| [Separate-host HTTPS](docs/hosted-nodes.md) | Per-host provisioning, CA trust, secure operator sessions, pairing, renewal and rollback |
+| [Separate-host results](docs/validation/hosted-2026-11-16.md) | Real-host opt-in, permission, correction, withdrawal, private-data-local and TLS evidence |
 
 The first build established the local website/API/MCP service. The current federation reference extends it across two local stores with distinct identities and explicit participation. Read the [prototype plan](docs/prototype-plan.md) for the original work packages; independent-organization acceptance and autonomous A2A delegation still have separate gates.
 

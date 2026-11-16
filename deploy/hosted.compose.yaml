@@ -82,6 +82,8 @@ services:
     image: nginx:stable-alpine@sha256:901e593c95dc85f5a729f5765516321366ef4ac401821431d408897e95287d0a
     user: '${NEXUS_UID}:${NEXUS_GID}'
     entrypoint: [/bin/sh, /nexus/proxy.sh]
+    environment:
+      NEXUS_PUBLIC_ORIGIN: ${NEXUS_PUBLIC_ORIGIN}
     depends_on:
       app: { condition: service_healthy }
     ports: ['${NEXUS_BIND_IP}:9443:8443']
@@ -90,6 +92,7 @@ services:
         '${NEXUS_STATE_DIR}/tls:/tls:ro',
         './nginx.conf:/etc/nginx/nginx.conf:ro',
         './proxy.sh:/nexus/proxy.sh:ro',
+        '${NEXUS_STATE_DIR}/trust:/trust:ro',
       ]
     networks: [data, egress]
     read_only: true
@@ -100,6 +103,15 @@ services:
     restart: unless-stopped
     cpus: 0.25
     mem_limit: 96m
+    healthcheck:
+      test:
+        [
+          CMD-SHELL,
+          'curl --silent --show-error --fail --cacert /trust/root.crt "$${NEXUS_PUBLIC_ORIGIN}/health" >/dev/null',
+        ]
+      interval: 5s
+      timeout: 4s
+      retries: 15
   renewal:
     image: smallstep/step-cli:latest@sha256:107e8497646c0e7c06cc5b6fd6fa13b5d2001909df6d7da3706b8541ed42bddf
     user: '${NEXUS_UID}:${NEXUS_GID}'
@@ -149,4 +161,8 @@ secrets:
 networks:
   data:
     internal: true
+    ipam:
+      config: [{ subnet: '${NEXUS_DATA_SUBNET}' }]
   egress:
+    ipam:
+      config: [{ subnet: '${NEXUS_EGRESS_SUBNET}' }]

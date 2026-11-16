@@ -1,5 +1,7 @@
 # AiRC Nexus federation v0.2
 
+This document preserves the local v0.2 reference. The [v0.3 separate-host HTTPS deployment](hosted-nodes.md) and its [validation](validation/hosted-2026-11-16.md) extend the transport and operator boundary without changing the signed v0.2 wire contract.
+
 This is a local reference implementation of the founding knowledge-commons idea: independently configured nodes retain control of their records, people explicitly choose what crosses a link, agents retrieve compact context, and validation reports go to the humans they serve. The two local nodes are operated by one person on one Mac; they do not establish independent institutional federation or scientific replication.
 
 The application uses the existing Apache-2.0 codebase and contracts. It does not import a competitor's registry, experience traces or reputation system. The wire format below is a small **Nexus prototype protocol**, not a claim of A2A, RO-Crate or general federation conformance.
