@@ -7,6 +7,8 @@ import { HelpPage } from './HelpPage.js';
 import { ContributionsPage } from './ContributionsPage.js';
 import { ActivityPage } from './ActivityPage.js';
 import type { Me } from './types.js';
+import { Search, ArrowLeftRight, Layers, Activity, UserRound, LogOut } from 'lucide-react';
+import { InquiryPage } from './InquiryPage.js';
 
 function useSession() {
   const [state, setState] = useState<{ data: Me | null; error: Error | null; busy: boolean }>({
@@ -126,7 +128,9 @@ function Workspace({ route, me, onSignIn }: { route: string; me: Me; onSignIn: (
         me={me}
       />
     );
-  } else if (segments[0] === 'help') content = <HelpPage me={me} onSignIn={onSignIn} />;
+  } else if (segments[0] === 'help' && segments[1])
+    content = <InquiryPage key={segments[1]} id={segments[1]} me={me} />;
+  else if (segments[0] === 'help') content = <HelpPage me={me} onSignIn={onSignIn} />;
   else if (segments[0] === 'contributions')
     content = <ContributionsPage me={me} onSignIn={onSignIn} />;
   else if (segments[0] === 'activity') content = <ActivityPage me={me} onSignIn={onSignIn} />;
@@ -146,60 +150,67 @@ export function App() {
     return () => window.removeEventListener('hashchange', changed);
   }, []);
   const tab = route.startsWith('/record') ? 'search' : route.split('/')[1] || 'search';
+  const name = session.data?.user.name.split(' · ')[0] ?? 'Public reader';
   return (
     <>
       <a href="#main-content" className="skip-link">
         Skip to content
       </a>
-      <header>
-        <div className="shell header-inner">
-          <a href="#/" className="wordmark">
-            AiRC Nexus
-          </a>
-          <nav aria-label="Main navigation">
-            {[
-              ['search', 'Search', '/'],
-              ['help', 'Help exchange', '/help'],
-              ['contributions', 'Contributions', '/contributions'],
-              ['activity', 'Activity', '/activity'],
-            ].map(([key, label, href]) => (
-              <a
-                key={key}
-                href={`#${href}`}
-                className={tab === key ? 'active' : ''}
-                aria-current={tab === key ? 'page' : undefined}
-              >
-                {label}
-              </a>
-            ))}
-          </nav>
-          <div className="session-controls">
-            {session.data?.user.kind === 'human' ? (
-              <>
-                <span className="identity">{session.data.user.name}</span>
-                <button
-                  className="secondary small"
-                  onClick={() => void session.logout().catch(() => {})}
-                >
-                  Sign out
-                </button>
-              </>
-            ) : (
+      <header className="app-sidebar">
+        <a href="#/" className="brand-link" aria-label="AiRC Nexus home">
+          <span className="brand-mark">
+            <img src="/brand/airc-mark.png" alt="" />
+          </span>
+          <span className="brand-title">AiRC Nexus</span>
+        </a>
+        <nav className="sidebar-nav" aria-label="Main navigation">
+          {[
+            { key: 'search', label: 'Search', href: '/', Icon: Search },
+            { key: 'help', label: 'Help exchange', href: '/help', Icon: ArrowLeftRight },
+            { key: 'contributions', label: 'Contributions', href: '/contributions', Icon: Layers },
+            { key: 'activity', label: 'Activity', href: '/activity', Icon: Activity },
+          ].map(({ key, label, href, Icon }) => (
+            <a
+              key={key}
+              href={`#${href}`}
+              className={tab === key ? 'active' : ''}
+              aria-current={tab === key ? 'page' : undefined}
+            >
+              <Icon size={30} strokeWidth={1.6} aria-hidden="true" />
+              <span>{label}</span>
+            </a>
+          ))}
+        </nav>
+        <div className="sidebar-account">
+          <UserRound size={28} strokeWidth={1.6} aria-hidden="true" />
+          {session.data?.user.kind === 'human' ? (
+            <>
+              <span>
+                {name}
+                <span className="account-role"> · demo {session.data.user.role}</span>
+              </span>
               <button
-                className="primary small"
-                disabled={session.busy}
-                onClick={() => setSignIn(true)}
+                className="account-signout"
+                aria-label="Sign out"
+                title="Sign out"
+                onClick={() => void session.logout().catch(() => {})}
               >
-                Sign in
+                <LogOut size={19} strokeWidth={1.6} />
               </button>
-            )}
-          </div>
+            </>
+          ) : (
+            <button
+              className="account-signin"
+              disabled={session.busy}
+              onClick={() => setSignIn(true)}
+            >
+              Sign in
+            </button>
+          )}
         </div>
       </header>
-      <div className="demo-notice">
-        <div className="shell">Local prototype · All records are authored demo data.</div>
-      </div>
-      <main className="shell" id="main-content" tabIndex={-1}>
+      <main className="workbench-main" id="main-content" tabIndex={-1}>
+        <div className="workbench-note">Local prototype · Authored demo knowledge</div>
         {session.busy ? (
           <Loading />
         ) : session.data ? (

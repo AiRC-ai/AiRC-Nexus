@@ -7,6 +7,7 @@ import { randomUUID } from 'node:crypto';
 import { buildApp } from '../../apps/server/app.js';
 import { publicFixtures, recordId } from '../../fixtures/records.js';
 import { testContext } from './helpers.js';
+import { HelpExchange } from '../../packages/core/help.js';
 
 describe('database-backed MCP service', () => {
   let t: Awaited<ReturnType<typeof testContext>>, app: FastifyInstance, client: Client;
@@ -68,6 +69,29 @@ describe('database-backed MCP service', () => {
     const bob = await connect(t.access.bob_agent, false);
     const r = await bob.callTool({ name: 'nexus_get', arguments: { id: recordId(101) } });
     expect(r.isError).toBe(true);
+  });
+  it('keeps even the help-detail references within a small declared byte budget', async () => {
+    const help = new HelpExchange(t.app);
+    for (let i = 0; i < 20; i++)
+      await help.request(
+        t.alice,
+        {
+          question: `Authored private context-budget question ${i}; no sharing is authorized.`,
+          environment: {},
+        },
+        randomUUID(),
+      );
+    const response = await client.callTool({
+      name: 'nexus_list_help',
+      arguments: { budget_bytes: 512 },
+    });
+    expect(response.isError).not.toBe(true);
+    const data = json(response);
+    expect(data.status).toBe('requires_detail');
+    expect(data.truncated).toBe(true);
+    expect(data.request_ids.length).toBeLessThan(20);
+    expect(Buffer.byteLength(JSON.stringify(data))).toBeLessThanOrEqual(512);
+    expect(JSON.stringify(data)).not.toContain('Authored private context-budget question');
   });
   it('submits only private quarantine and records idempotent private outcomes', async () => {
     const key = randomUUID();

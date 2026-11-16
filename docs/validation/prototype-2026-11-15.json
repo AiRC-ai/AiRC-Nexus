@@ -1,0 +1,228 @@
+{
+  "recorded_date": "2026-11-15 America/Los_Angeles",
+  "scope": "Local authored prototype validation; post-implementation tasks; no held-out or independent model/science/federation claim.",
+  "observed_checks": {
+    "unit_integration_passed": 29,
+    "browser_journeys_passed": 4,
+    "basis": "Observed successful npm test and npm run test:e2e terminal results; test source hashes below",
+    "help_reference_budget_regression": "20 private help requests; fallback payload within declared 512 bytes, whole questions omitted",
+    "database_idle_recovery_regression": "Disposable backend terminated; separate Node client survived with generic diagnostics and reconnected."
+  },
+  "retrieval": {
+    "scope": "Authored post-implementation regression pilot. Defined after initial tuning; not held-out or independently curated. No model success comparison is implied.",
+    "task_sha256": "3c25c6021117d11b292329ed8d22182047194966d4e32a5472828caf7b0630a4",
+    "corpus_sha256": "c5a4e90eca2ad9eab46741f219cd9a39ab5f9f945b66b5d384d070436e6a48aa",
+    "summary": {
+      "answerable": 30,
+      "nexus_hit_at_5": 30,
+      "flat_keyword_hit_at_5": 30,
+      "wrong_version_tasks": 10,
+      "wrong_version_excluded": 10,
+      "unknown_tasks": 10,
+      "unknown_no_candidates": 5
+    },
+    "performance": {
+      "records": 1000,
+      "concurrent_clients": 10,
+      "first": {
+        "search_ms": 141.9031670000004,
+        "get_ms": 48.33195799999976,
+        "note": "First HTTP requests; database and OS caches were not flushed."
+      },
+      "warm_search": {
+        "requests": 50,
+        "median_ms": 279.89,
+        "p95_ms": 370.8,
+        "max_ms": 384.86
+      },
+      "warm_get": {
+        "requests": 50,
+        "median_ms": 93.64,
+        "p95_ms": 144.03,
+        "max_ms": 294.58
+      },
+      "database_cpu_limit": 2,
+      "database_memory_gib": 2,
+      "api_node": "v24.22.3",
+      "platform": "darwin/arm64"
+    },
+    "limitations": [
+      "Post-implementation authored regression, not held-out validation.",
+      "Keyword retrieval results are not model task success or appropriate abstention.",
+      "Unknown questions can return broad matches with explicit limitations; requester relevance judgment remains necessary.",
+      "Only the chosen cloud model has been exercised; no smaller-local-model comparison or incremental-value claim."
+    ]
+  },
+  "cloud_requester": {
+    "model": "deepseek-v4.1-flash:cloud",
+    "model_calls": 3,
+    "input_tokens": 7288,
+    "output_tokens": 569,
+    "elapsed_ms": 3856,
+    "protocol": "2026-07-28",
+    "reference_check": "3 authored predicate assertions passed",
+    "outcome_visibility": "private",
+    "independent_replication": false
+  },
+  "cloud_peer": {
+    "passed": true,
+    "model": "deepseek-v4.1-flash:cloud",
+    "checks": [
+      "question private before fixture-owner approval",
+      "reply private before separate fixture-owner approval",
+      "shared answer reported to requester",
+      "revocation enforced"
+    ],
+    "consent": "Simulated approvals by synthetic fixture owners in an isolated database",
+    "independent_replication": false,
+    "federation": false,
+    "stages": [
+      {
+        "stage": "requester_draft",
+        "model_calls": 2,
+        "input_tokens": 1360,
+        "output_tokens": 273,
+        "elapsed_ms": 8039
+      },
+      {
+        "stage": "helper_reply",
+        "model_calls": 3,
+        "input_tokens": 6305,
+        "output_tokens": 1145,
+        "elapsed_ms": 16687
+      },
+      {
+        "stage": "requester_report",
+        "model_calls": 2,
+        "input_tokens": 1910,
+        "output_tokens": 511,
+        "elapsed_ms": 10027
+      }
+    ]
+  },
+  "backup_restore": {
+    "passed": true,
+    "records": 65,
+    "revisions": 66,
+    "protected_tables_checked": 4,
+    "restored_nonprivileged_roles": 2,
+    "anonymous_private_and_team_reads_denied": true,
+    "scope": "Local authored demo PostgreSQL dump restored into a temporary database; no outside backup service or disaster-recovery claim."
+  },
+  "service_recovery": {
+    "passed": true,
+    "scope": "Task-owned native services only",
+    "partial_pair_recovery": true,
+    "api_health_after_restart": true
+  },
+  "npm_audit": {
+    "info": 0,
+    "low": 0,
+    "moderate": 0,
+    "high": 0,
+    "critical": 0,
+    "total": 0
+  },
+  "open_gates": [
+    "Genuinely held-out tasks",
+    "Paired smaller-local-model outcomes and token use",
+    "Outside users and reviewed research evidence",
+    "Independent-node federation",
+    "Production identity, privacy and deployment review"
+  ],
+  "source_files_sha256": {
+    "Dockerfile": "bd5835fec04d78ae7ff5f3803dc3b09db07fbaf9a849f4b6e781b676b7e30804",
+    "apps/mcp/main.ts": "d95b86716839429ac6007ea093354b87fad763e8906b17356df6a75088943bad",
+    "apps/mcp/server.ts": "0993f40be093cb0f86d6b73db0215a2a0b4c19c880b45dac50bda8822f7444a7",
+    "apps/mcp/spike.ts": "0dc831c4b700ed12f6687310afdbb24394478e6eda9dff345c9dc6078650ab9c",
+    "apps/server/app.ts": "46d94b08e7ff69fe0d06d650c2e8123b5def89699fb502d8cbc72a503ed20735",
+    "apps/server/main.ts": "cde8f10d4d5ce782b68dbbc9d4381879db0b5ed1b3d99133ed15f976b0eaff8d",
+    "apps/web/index.html": "89e004e8dc188d4981dad483d8d5efc6ade8c43dedc26c0388a481891650efc0",
+    "apps/web/src/ActivityPage.tsx": "f20c7503e831acb4d59c3f0194ffcd36e861b78dfa4893b53d957204c27badeb",
+    "apps/web/src/App.tsx": "c082a77bb67f421959dc871cc8c326787712d520494da19d215eefee29055fae",
+    "apps/web/src/ContributionsPage.tsx": "f3b900228627727d19f739742a0a8a6f386f579c35829656c4928fd15dcbfa53",
+    "apps/web/src/HelpPage.tsx": "cb84055bdc8eca91e33ebb305f5adec053b513d44be0b887c6e6d0caa05fd2be",
+    "apps/web/src/InquiryPage.tsx": "309ebfb4bab3411a0c5bebd7c4eed668b53e7e8140f16f91e62d2ee984ae7024",
+    "apps/web/src/MathExpression.tsx": "5b61a2e76efd4d7ffd4eec4e1c21995aa1ca6642bf397d46c5debb278f484760",
+    "apps/web/src/RecordPage.tsx": "ac58e94091e60e1408033d714bb11c93ef82e4522fc44dfedeccead551edf181",
+    "apps/web/src/SearchPage.tsx": "7782f36e473546dd58456f2df8a821936a0ed7928c8e25d4a4be52acd458da8b",
+    "apps/web/src/api.ts": "14529406e7da5990c6ebb12af1fe4024b9ea65f61ed3734f860918602d4d64c0",
+    "apps/web/src/env.d.ts": "65996936fbb042915f7b74a200fcdde7e410f32a669b1ab9597cfaa4b0faddb5",
+    "apps/web/src/main.tsx": "26146c1b4d616814f4a0585904649b51dbb983e538b7708413b8405d2707819d",
+    "apps/web/src/style.css": "20f967e575382b020cffbef6c24215eec92873f4728300b70bf4655ea3b9459d",
+    "apps/web/src/types.ts": "ad422a872ce9b9a197093f67f05d53d72f522e654f10f2ec4e9dcda4edaa342f",
+    "apps/web/src/ui.tsx": "d882fb2106c3b33089fd0349e383e940ac13cb1b6f9124aab3b4a5e7fca758f2",
+    "apps/web/src/workbench.css": "64855629f6fd686fe0ef937a35af6798ae14d507acc62c5127df0c610ef87f53",
+    "apps/web/vite.config.ts": "a58b25d5ddcb57c088d3606276ce43edee4e3794347e31569da0ca02ae8730a3",
+    "apps/worker/main.ts": "8ae6cc5ad572b284ca6bf0c0da51e602e42763a86705bd84ec40c377db855200",
+    "apps/worker/run.ts": "d8b81a054d96415a38876cd3cbf506b2801ae67fffb57a91f3523b525758afc8",
+    "compose.yaml": "aec08995d223c476b0e712d903688f46ffc8eec93da20ba888a64c60ff5f627c",
+    "evals/ollama-agent.ts": "024eb8a46545bd599202944d5d1fbdc8e714bac15fa3ea4dea6d429b245f8f42",
+    "evals/peer.ts": "fc2f32277192df32b126002d0027563b2f9db133a25000eb77e90866bcb91a5a",
+    "evals/retrieval.ts": "f300ab6646c1e56ba7c2dddc7988b388f5e87a9f367ed94b36f30a823c8a018a",
+    "evals/smoke.ts": "a38eee2d3a735bbf2a37ade060021b7c07ca2d1f588cca39a1e89ea63ee79071",
+    "evals/tasks.json": "3c25c6021117d11b292329ed8d22182047194966d4e32a5472828caf7b0630a4",
+    "fixtures/knowledgepulse-sop.json": "b95d20df5ef45a855c0b605aa39778320202d2be7fb87ae2c70961bf10f15f68",
+    "fixtures/records.ts": "963ccfcea70f5168e73490265919bf0f44c1cc0ba09f7212b9fd6cd1ee55ab05",
+    "package-lock.json": "408bdf0a70eec2f526e8682bd11d96fbeca531698a950ee058aa47827c4a67ca",
+    "package.json": "3180b93ed3bd6702c73c12e818c3ddab8d637d26f220b39340cd5c42d4005d63",
+    "packages/contracts/index.ts": "79d02e9d5643b683160537646af18fb45ae25682887f1dae28aade92b15f621c",
+    "packages/core/config.ts": "4bbf26bc0291297fdca210e95aefc39f1251d33b8e287de7f3978675cd1c6620",
+    "packages/core/context.ts": "7703930e93b82bb64c4b360c40c4c631d2282b2927ce1ceec862b7f6009078fd",
+    "packages/core/errors.ts": "d8fc5b3d3d658a50e95316e11fb78b03b2752de1c264a834c9ed68464936c5b4",
+    "packages/core/help.ts": "e11dc80a29062f79f386e3cc4a2a785f6095749fa238e6cadacb4afb4bc102d1",
+    "packages/core/screen.ts": "d9fb05d993f1f571661e5981292e9cadeb0fe14e0f13b39b676cb319796ffd16",
+    "packages/core/store.ts": "5e47d844c51e225e6c298298f8e2181c33ab1444377ff024fe92d37da328b7fa",
+    "packages/db/index.ts": "ead308b499a249b7157969076027d6a5939ad3885f074f01866f0a0235f7ceab",
+    "packages/db/migrations/001_init.sql": "a384c6abb39a378d4edb8cfe7eaf4dbaf3b7f2daea45dc2bad0242a7a53a7403",
+    "packages/db/migrations/002_owner_reports.sql": "10eb5923e9e8edbd0ebc746a9c42204e41f0777480cb054081b28ec62002a5d5",
+    "packages/db/migrations/003_help_exchange.sql": "b9475bf3f8c7e6cf324d5dcfdf437383fe96eb41d9b9e5fd32aaaf2f06ca8d9c",
+    "packages/db/migrations/004_fail_closed_scan.sql": "c4ecacc7e4d227b5fb179709e71ad03b0e93cb022f882abe006c5873064c362f",
+    "packages/db/migrations/005_help_insert_visibility.sql": "88aa306238f52b0a470fade0202f3b657d62f5a913be48a303af4fda54c14561",
+    "packages/db/migrations/006_help_actor_provenance.sql": "7e65978e2cf54b7d3ff635e374acad08d9566fd2c4893d756abab9cfccd8ebb3",
+    "packages/db/migrations/007_natural_language_search.sql": "a8831511706872788a686dfd372656065fa8fd3f5f6162a0ce3cd60cb04acb5b",
+    "packages/db/migrations/008_set_based_read_policies.sql": "f9de5e08b5af19008e14b0521fac5b00eeb8d6e220545d56aae1911ddfa647eb",
+    "packages/interop/knowledgepulse.ts": "b1b202fa6141ac801bc3785cd2b035262bfd4a2ec2fd0492b0efc87073c28949",
+    "packages/interop/ro-crate.ts": "d936e629bacbd6aaf3158e2c0b1fb3c220a952db21a9bd936e9059de250d0db6",
+    "playwright.config.ts": "6968203fc8ff9285157c770d1c333bfc8076747c92708ea36da8f45af2e9afc7",
+    "scripts/access.ts": "7959a16519c280793637b1771af638633f72d1c1dd52f1edc039192b1987fd0b",
+    "scripts/bootstrap.ts": "c672136e4196d8147fc2c06fa4a547a49651df0eea07d4c589f0b4310f0ebfe3",
+    "scripts/check-codex-mcp.mjs": "34b6b7566e1deb740e5ce18918467afa81298d44d53d28b1327ed2af1bbf9efb",
+    "scripts/compose-init.ts": "bee23f41a6825c09b24163109e442bcd550f4eb5f8ab211daeda1d0a1db3ddbe",
+    "scripts/compose.mjs": "23f41f427a48b87e29d2e5c82b6f0941fdc8ecffe91491f9285417927db235d0",
+    "scripts/demo.mjs": "3fb4db9e304378c805f7e54a9a5758b345b04b94a3a7cf06f312765c0ea46779",
+    "scripts/dependency-inventory.mjs": "52b18c562fda3b5118a9b433bdd8b06d274ae6c94d1814b64c8c7e41ca7c3bc8",
+    "scripts/migrate.ts": "5ca7ddc3dfecadfbaea18ce40a11013a2a3ee901246a516baab2d9e96e28eb5a",
+    "scripts/seed-exchange.ts": "a4326b48864d7bfafdeb9e98b657ba0833446ef6f83365b6c5aa7bb5e70880da",
+    "scripts/seed.ts": "5c5e9e34de8ff0870b657c58136eb44ffa4363bc55d1717f1e3f45f4fc318590",
+    "scripts/verify-compose.mjs": "1f08b7a5250e2a0d1baedda7cbade3e2bd30dd5a4d1b40d530b84635922d3ebd",
+    "scripts/verify-restore.ts": "c5af074440d04263a505bada0de173d8963c75e9c8528743ba39649b4b6f55e9",
+    "tests/e2e/ui.spec.ts": "13f89dc3293eefd8ad078e8e41764d70cc85d46b8ea967505fdb0683c7dfdd5d",
+    "tests/integration/compatibility.test.ts": "7f2e18ca888d0ad712e4e532430644544ab0dc0e072d5fba80a66fc7ee8815c2",
+    "tests/integration/help.test.ts": "18941907c2406e5c361719a6a16c5e6ccccdae1e9e5ba1e0d3297ae0b1167001",
+    "tests/integration/helpers.ts": "4298316f17ed21566eee303fa840ed2e9d9d0179d805f7ae37a86ab2c846462f",
+    "tests/integration/http.test.ts": "00e1b16d0bcd846ad20dcc15cabdc894b2bd025710f3532b6246691e595266c7",
+    "tests/integration/mcp.test.ts": "0ed0ed1ae077dfab845a72f169170ab256a641590c2f6e9ced39cc2b4483fdfc",
+    "tests/integration/read-policy.test.ts": "dfe30101a92fca503ec407845c923627a51fa4f7bfd24f89156a97e480c49934",
+    "tests/integration/recovery.test.ts": "02b600b899e3ae426b32c3bd4b94e039f59fa8b5acd4bf55b1c8069c7d8e9158",
+    "tests/integration/retrieval.test.ts": "aa4042423d46ad90c2e397353cb0e91901c1b87ffe13fba3f027bd356c9bd2a1",
+    "tests/integration/storage.test.ts": "100164c9bd12bb5477f2dd6df3d5321fcd86749d563afed670f8f5b8297bb6aa",
+    "tests/unit/context.test.ts": "6b4fd3c41254b165d96d8eed9de072cb0d922f91307bb155942443d28dbd9b7b",
+    "tests/unit/interop.test.ts": "150913d4935ee128a3bdcd30f63a9205020ff956798e8c5bc938fc597e06d144",
+    "tsconfig.json": "34189fd7ed5639df756542f530e932fdb95f412d13b9742f94183a1d1758ebb4",
+    "vitest.config.ts": "c721f5ff7d7513ac062c5b5505fd149979c72db62bd0fa57773ae182c689c299"
+  },
+  "source_manifest_sha256": "17d5ec966c7f0d9fefb0c515a9cbcad1fe4e54db2bf8fb0663699557699e4b35",
+  "compose": {
+    "passed": true,
+    "restricted_database_roles": 2,
+    "services_checked": 3,
+    "loopback_app_only": true,
+    "database_not_published": true,
+    "images": [
+      "sha256:27476282dd43a65323dc7d6bac85c65d784f3a31d6a9f4b3b4d742949797ba79",
+      "sha256:2ea8630df176ad090ec92136dee850397c5af8781e4bcf2e4162593691c61bbc"
+    ],
+    "state_after_validation": "Stopped; private volume retained; native preview running on 4318"
+  }
+}

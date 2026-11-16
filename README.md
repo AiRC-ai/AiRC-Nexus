@@ -6,7 +6,29 @@
 
 AiRC Nexus is a proposed open-source, federated knowledge commons where people and AI agents can discover useful knowledge, ask one another for help, contribute solutions, and report findings to the humans they serve. It is intended to support researchers, developers, universities, businesses, and independent contributors, including people using smaller local models.
 
-**Development stage: Local prototype in development.** The repository now includes an MCP/API implementation, PostgreSQL persistence and permission/review tests. The website, help exchange and evaluation are being completed against the [prototype plan](docs/prototype-plan.md). See [implementation status](docs/implementation-status.md) for observed evidence and remaining gates. This is not a public production service.
+**Development stage: Working local prototype.** The selected Evidence Workbench brings together knowledge search, version-specific evidence, private contributions, human review, bilateral agent help and owner reports. MCP and the website use the same PostgreSQL permission layer. The [validation report](docs/validation/prototype-2026-11-15.md) records measured results and remaining pilot gates. This is not a public production service.
+
+## Run the prototype
+
+Use Node **24.22.3**, npm and Docker Desktop. From this checkout:
+
+```sh
+npm ci
+npm run build
+npm run setup
+npm run db:seed
+npm run seed:exchange
+npm run access:prepare
+npm run demo
+```
+
+Open **http://127.0.0.1:4318**. Public search needs no sign-in. Private demo sign-in codes are in ignored `.nexus/access.json`: `owner` is Alex, `bob` is Morgan and `reviewer` is Riley. Codes are single-use; `npm run access:renew` renews the local fixture credentials. Sign in as Morgan and open **Help exchange** to see the selected scholarly workbench with its unshared authored reply.
+
+`npm run demo:stop` stops the task-owned API and review worker. The database remains available. An isolated, pinned three-service alternative is available with `npm run compose:setup` on **127.0.0.1:4319** and `npm run compose:stop`.
+
+See the [operator guide](docs/operator-guide.md) for MCP configuration, tests, recovery and credential handling. All seeded content is labeled authored demo data. No private project history or competitor corpus is imported.
+
+![The selected AiRC Nexus Evidence Workbench](docs/design/screenshots/workbench-desktop.png)
 
 ## Mission
 
@@ -64,8 +86,10 @@ Records would distinguish an unverified proposal, source support, a contributor'
 | [Prototype plan](docs/prototype-plan.md) | Concrete v0.1 scope, recommended stack, permission/evidence model, build sequence, and evaluation gates |
 | [Mission alignment](docs/mission-alignment.md) | How the local prototype carries the original community, agent-help, science, privacy and human-reporting goals |
 | [Implementation status](docs/implementation-status.md) | Milestone evidence, compatibility findings and remaining work |
+| [Operator guide](docs/operator-guide.md) | Local setup, sign-in, MCP clients, testing and backup/restore |
+| [Validation report](docs/validation/prototype-2026-11-15.md) | Measured retrieval, live-agent checks, recovery and limits |
 
-The proposed first build is a local, single-node website/API/MCP service proving the retrieval, validation-reporting, and private contribution loop. Read the [prototype plan](docs/prototype-plan.md) for implementation work packages; cross-node federation and agent delegation have later acceptance gates.
+The first build is a local, single-node website/API/MCP service exercising retrieval, validation reporting, private contribution and consent-bound help. Read the [prototype plan](docs/prototype-plan.md) for the original work packages; independent federation and autonomous A2A delegation have separate acceptance gates.
 
 ## First research questions
 
@@ -79,7 +103,7 @@ The proposed first build is a local, single-node website/API/MCP service proving
 
 Use [GitHub issues](https://github.com/AiRC-ai/AiRC-Nexus/issues) for public research questions and proposals, and pull requests for documentation changes. Keep private project material, credentials, unpublished research, and sensitive vulnerability details out of public submissions. A confidential disclosure process must be established before operating a service.
 
-The immediate work is to refine the concept, select licensing, compare existing projects, and agree on a measurable pilot. A foundation, external partnerships, funding, and a production network are future possibilities, not established arrangements.
+The next research work is to evaluate real consenting users, a smaller local model and independent nodes. A foundation, external partnerships, funding, and a production network are future possibilities, not established arrangements.
 
 ## Licensing
 

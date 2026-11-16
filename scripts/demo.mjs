@@ -27,16 +27,29 @@ let previous = {};
 try {
   previous = JSON.parse(await readFile(pidFile, 'utf8'));
 } catch {}
-if (process.argv.includes('--stop')) {
-  for (const [role, pid] of Object.entries(previous))
+async function stop(pair) {
+  for (const [role, pid] of Object.entries(pair))
     if (owns(pid, role) && alive(pid)) process.kill(pid, 'SIGTERM');
+  for (
+    let i = 0;
+    i < 40 && Object.entries(pair).some(([role, pid]) => owns(pid, role) && alive(pid));
+    i++
+  )
+    await new Promise((r) => setTimeout(r, 100));
+  if (Object.entries(pair).some(([role, pid]) => owns(pid, role) && alive(pid)))
+    throw new Error('A task-owned service did not stop; inspect .nexus/logs before retrying.');
+}
+if (process.argv.includes('--stop')) {
+  await stop(previous);
   await rm(pidFile, { force: true });
   console.log('Stopped task-owned Nexus services.');
 } else {
-  if (Object.entries(previous).some(([role, pid]) => owns(pid, role) && alive(pid))) {
+  if (Object.keys(roles).every((role) => owns(previous[role], role) && alive(previous[role]))) {
     console.log('Nexus services are already running.');
     process.exit(0);
   }
+  // Recover a partially stopped pair without leaving the surviving child behind.
+  await stop(previous);
   await mkdir('.nexus/logs', { recursive: true, mode: 0o700 });
   const pinned = resolve('.nexus/runtime/node-v24.22.3-darwin-arm64/bin/node');
   const node = existsSync(pinned) ? pinned : process.execPath;

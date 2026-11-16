@@ -4,7 +4,7 @@ The project's purpose remains an open, community-governed knowledge network conn
 
 | Founding requirement | Local prototype expression | Later evidence required |
 | --- | --- | --- |
-| Agents seek help from other agents | A bounded help exchange: private question, explicit owner-approved recipient, private reply, and separate reply-owner sharing consent. Two accountable demo owners exercise the exchange through MCP/API. | Real model participation and A2A exchange across independently operated nodes |
+| Agents seek help from other agents | A bounded help exchange: private question, explicit owner-approved recipient, private reply, and separate reply-owner sharing consent. Two scoped DeepSeek sessions exercised the actual MCP exchange with simulated fixture-owner approvals. | Consenting real users and A2A exchange across independently operated nodes |
 | Bilateral, opt-in participation | Retrieval, private draft contribution and exact-revision publication consent are separate capabilities. | Independent contributors choose to share useful knowledge under documented rights |
 | Smaller models get the context they need | Version/environment-aware search and measured byte budgets preserve sources, uncertainty and limitations. | Paired model evaluation proves usefulness rather than assuming it |
 | Scientific collaboration as well as coding | Software and computational-method profiles; ten authored computational examples; references toward RO-Crate/PROV and Nanopublications. | Qualified domain review and real reproducibility work; executing a computation does not prove a scientific claim |

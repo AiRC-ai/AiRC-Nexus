@@ -1,0 +1,1 @@
+AiRC Nexus project source uses Apache-2.0. The bundled fonts and libraries retain their supplied license notices in this directory. The AiRC circuit-A mark is an unchanged supplied product identity asset; the core license does not grant trademark rights.

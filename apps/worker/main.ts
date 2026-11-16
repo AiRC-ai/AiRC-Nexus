@@ -3,15 +3,20 @@ import { loadConfig } from '../../packages/core/config.js';
 import { runReviewJob } from './run.js';
 const pool = createPool((await loadConfig()).worker_url);
 let stopped = false;
+let failureReported = false;
 for (const signal of ['SIGTERM', 'SIGINT'])
   process.on(signal, () => {
     stopped = true;
   });
 while (!stopped) {
   try {
-    if (await runReviewJob(pool)) continue;
+    const worked = await runReviewJob(pool);
+    failureReported = false;
+    if (worked) continue;
   } catch {
-    console.error('nexus_worker: bounded job failure; no approval was issued');
+    if (!failureReported)
+      console.error('nexus_worker: bounded job failure; no approval was issued');
+    failureReported = true;
   }
   await new Promise((r) => setTimeout(r, 500));
 }

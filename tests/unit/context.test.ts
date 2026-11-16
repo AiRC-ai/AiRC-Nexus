@@ -27,6 +27,9 @@ describe('bounded evidence context', () => {
     expect(result.returned_bytes).toBe(Buffer.byteLength(JSON.stringify(result)));
     expect(compatibility({ version: '>=24 <25' }, { version: '24.22.3' })).toBe('applicable');
     expect(compatibility({ version: '>=24 <25' }, { version: '20.1.0' })).toBe('incompatible');
+    expect(
+      compatibility({ runtime: 'node', version: '>=24 <25' }, { runtime: 'Node 24.22.3' }),
+    ).toBe('applicable');
     expect(compatibility({ version: 'a non-semver scheme' }, { version: '24.22.3' })).toBe(
       'unknown',
     );

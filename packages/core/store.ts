@@ -33,10 +33,12 @@ type Row = {
   can_manage: boolean;
   can_review: boolean;
   assessments?: unknown[];
+  strict_match?: boolean;
 };
-const selectRevision = `SELECT r.id,r.origin_node,r.state,r.visibility,v.id AS revision_id,v.sequence,v.content,v.digest,v.created_at,
-  nexus.owns_record(r.id) AS can_manage,nexus.can_review(v.id) AS can_review
-  FROM nexus.records r JOIN nexus.record_revisions v ON v.record_id=r.id`;
+const revisionFields = `r.id,r.origin_node,r.state,r.visibility,v.id AS revision_id,v.sequence,v.content,v.digest,v.created_at,
+  nexus.owns_record(r.id) AS can_manage,nexus.can_review(v.id) AS can_review`;
+const revisionFrom = `FROM nexus.records r JOIN nexus.record_revisions v ON v.record_id=r.id`;
+const selectRevision = `SELECT ${revisionFields} ${revisionFrom}`;
 export class Store {
   constructor(readonly pool: Pool) {}
   private scope(actor: Principal, name: string) {
@@ -92,11 +94,21 @@ export class Store {
     const opts = SearchSchema.parse(input);
     return withActor(this.pool, actor, async (db) => {
       const result = await db.query(
-        `${selectRevision}
-        WHERE v.id=r.current_revision_id AND r.state='published' AND nexus.can_read_revision(v.id)
-        AND ($1='' OR v.search_vector @@ plainto_tsquery('simple',$1))
+        `WITH terms AS (
+          SELECT plainto_tsquery('simple',$1) AS strict_q,websearch_to_tsquery('english',$1) AS language_q,
+            (SELECT string_agg(quote_literal(term),' | ') FROM unnest(tsvector_to_array(to_tsvector('english',$1))) AS term) AS alternatives
+        ), parsed_query AS (
+          SELECT strict_q,language_q,CASE WHEN alternatives IS NULL THEN NULL::tsquery ELSE to_tsquery('english',alternatives) END AS relaxed_q FROM terms
+        )
+        SELECT r.id,r.visibility,v.id AS revision_id,v.content,v.created_at,
+          (v.search_vector @@ q.strict_q OR v.natural_vector @@ q.language_q) AS strict_match
+        ${revisionFrom} CROSS JOIN parsed_query q
+        WHERE v.id=r.current_revision_id AND r.state='published'
+        AND ($1='' OR v.search_vector @@ q.strict_q OR v.natural_vector @@ q.language_q OR v.natural_vector @@ q.relaxed_q)
         AND ($2::text IS NULL OR v.content->>'profile'=$2)
-        ORDER BY ts_rank_cd(v.search_vector,plainto_tsquery('simple',$1)) DESC,r.id LIMIT 201`,
+        ORDER BY (CASE WHEN v.search_vector @@ q.strict_q THEN 4 ELSE 0 END
+          + CASE WHEN v.natural_vector @@ q.language_q THEN 2 ELSE 0 END
+          + coalesce(ts_rank_cd(v.natural_vector,q.relaxed_q),0)) DESC,r.id LIMIT 201`,
         [opts.query, opts.profile ?? null],
       );
       const candidates: Record<string, unknown>[] = [];
@@ -113,11 +125,23 @@ export class Store {
           revision_id: row.revision_id,
           title: row.content.title,
           profile: row.content.profile,
+          visibility: row.visibility,
           problem: row.content.problem,
           resolution: row.content.resolution,
           environment: row.content.environment,
           compatibility: match,
-          limitations: row.content.limitations,
+          retrieval: !opts.query
+            ? 'browse'
+            : row.strict_match
+              ? 'strict_terms'
+              : 'broader_keywords',
+          limitations:
+            opts.query && !row.strict_match
+              ? [
+                  ...row.content.limitations,
+                  'Broader keyword match: confirm that this record answers the actual question.',
+                ]
+              : row.content.limitations,
           sources: row.content.sources,
           rights: row.content.rights,
           evidence: assessments.rows,

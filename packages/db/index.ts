@@ -5,13 +5,21 @@ import { createHash } from 'node:crypto';
 
 export const tokenHash = (value: string) => createHash('sha256').update(value).digest('hex');
 export function createPool(connectionString: string) {
-  return new pg.Pool({
+  if (!connectionString || !/^postgres(?:ql)?:\/\//.test(connectionString))
+    throw new Error('database_configuration_required');
+  const pool = new pg.Pool({
     connectionString,
     max: 10,
     connectionTimeoutMillis: 5_000,
     idleTimeoutMillis: 10_000,
     statement_timeout: 5_000,
   });
+  // PostgreSQL/container restarts can drop an idle client outside an awaited query.
+  // Handle the pool event so Node neither exits nor prints the client object.
+  pool.on('error', () => {
+    console.error('nexus_database: idle connection lost; later requests will reconnect');
+  });
+  return pool;
 }
 export type Pool = pg.Pool;
 export type Connection = pg.PoolClient;

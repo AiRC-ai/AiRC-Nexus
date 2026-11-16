@@ -1,24 +1,10 @@
+import { ArrowRight, Search } from 'lucide-react';
 import { createContext, useContext, type ReactNode } from 'react';
 export function Arrow() {
-  return (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <path
-        d="M4 12h15m-6-6 6 6-6 6"
-        stroke="currentColor"
-        strokeWidth="1.7"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
+  return <ArrowRight size={24} strokeWidth={1.6} aria-hidden="true" />;
 }
 export function SearchIcon() {
-  return (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <circle cx="10.5" cy="10.5" r="6.5" stroke="currentColor" strokeWidth="1.7" />
-      <path d="m15.5 15.5 5 5" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
-    </svg>
-  );
+  return <Search size={24} strokeWidth={1.6} aria-hidden="true" />;
 }
 export function Feedback({ error, message }: { error?: Error | null; message?: string }) {
   return error ? (

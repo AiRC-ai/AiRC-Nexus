@@ -3,7 +3,10 @@ import { z } from 'zod';
 const text = (max: number) => z.string().trim().min(1).max(max);
 export const EnvironmentSchema = z
   .record(text(64), text(128))
-  .refine((v) => Object.keys(v).length <= 16);
+  .refine((v) => Object.keys(v).length <= 16)
+  .describe(
+    'Environment key/value map. For Node use {"runtime":"node","version":"24.22.3"}; keep the version separate. Authored computational demo methods use {"dataset":"nexus-synthetic-v1"}. Unknown applicability is not a compatibility guarantee.',
+  );
 export const VisibilitySchema = z.enum(['private', 'team', 'public']);
 export const ProfileSchema = z.enum(['software_fix', 'computational_method']);
 export const ContentSchema = z
@@ -117,6 +120,7 @@ export const HelpReplySchema = z
     answer: text(8_000),
     limitations: z.array(text(500)).min(1).max(8),
     sources: ContentSchema.shape.sources,
+    equations: z.array(text(800)).max(3).optional(),
   })
   .strict();
 export type Content = z.infer<typeof ContentSchema>;

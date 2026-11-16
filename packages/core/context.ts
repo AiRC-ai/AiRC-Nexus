@@ -1,9 +1,15 @@
 import semver from 'semver';
 
 export function compatibility(required: Record<string, string>, supplied: Record<string, string>) {
+  const normalized = { ...supplied };
+  const node = supplied.runtime?.match(/^node(?:\.js)?(?:\s+v?(\d+\.\d+\.\d+))?$/i);
+  if (node) {
+    normalized.runtime = 'node';
+    if (!normalized.version && node[1]) normalized.version = node[1];
+  }
   let unknown = false;
   for (const [key, expected] of Object.entries(required)) {
-    const actual = supplied[key];
+    const actual = normalized[key];
     if (!actual) {
       unknown = true;
       continue;

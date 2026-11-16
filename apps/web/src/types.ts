@@ -35,6 +35,7 @@ export interface Knowledge {
   } | null;
 }
 export interface Result extends Content {
+  visibility: string;
   id: string;
   revision_id: string;
   compatibility: string;
@@ -48,15 +49,22 @@ export interface SearchResults {
   returned_bytes: number;
 }
 export interface Reply {
+  creator_kind: string;
   id: string;
   digest: string;
   shared: boolean;
   mine: boolean;
   screening: { blocked: boolean; reasons: string[] };
-  content?: { answer: string; limitations: string[]; sources: Content['sources'] };
+  content?: {
+    answer: string;
+    limitations: string[];
+    sources: Content['sources'];
+    equations?: string[];
+  };
   created_at: string;
 }
 export interface HelpRequest {
+  creator_kind: string;
   id: string;
   question: string;
   environment: Record<string, string>;

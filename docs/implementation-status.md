@@ -6,12 +6,12 @@ Started November 15, 2026. Scope: local v0.1 from the [prototype plan](prototype
 
 | Milestone | State | Evidence |
 | --- | --- | --- |
-| P0: MCP compatibility and reuse | Protocol/host checks passed | SDK 2.4.0 real stdio search/get calls passed with legacy `2025-11-25` and pinned `2026-07-28`; Codex CLI 0.141.0 discovered both tools in an isolated process. No model turn or new chat was created. |
+| P0: MCP compatibility and reuse | Protocol/host and selected-cloud checks passed | SDK 2.4.0 real stdio search/get calls passed with legacy `2025-11-25` and pinned `2026-07-28`; Codex CLI 0.141.0 discovered the spike tools in an isolated process. The separate DeepSeek harness completed actual tool-calling journeys. No new Codex chat was created. |
 | P1: schema and permissions | Focused checks passed | Real PostgreSQL 18.7, separate app/worker roles, migrations, RLS, revision freezing and per-revision grants; fresh/incremental migration checks passed. |
-| P2: retrieval and context | Focused checks passed | Full-text retrieval, exact/range environment checks, UTF-8 budgets and whole-record omission when critical context cannot fit. |
-| P3: MCP and website | Implemented; browser acceptance in progress | Seven database-backed MCP tools; website search/detail, contributions/review, help exchange and owner activity. Native in-app browser search/science/detail/help inspection passed. |
+| P2: retrieval and context | Local checks passed | Code-friendly and natural-language full-text search, labeled broader matches, exact/range environment checks, UTF-8 budgets and whole-record omission when critical context cannot fit. The authored regression and 1,000-record workload are measured. |
+| P3: MCP and website | Implemented; local browser acceptance passed | Seven database-backed MCP tools; selected branded Evidence Workbench, search/detail, contributions/review, help and activity. Four isolated Chrome acceptance journeys and native in-app browser search/science/detail inspection passed. |
 | P4: consent and review | Core integration checks passed | Private quarantine, bounded screening, exact-revision review/consent, negative evidence and withdrawal. The help exchange separately gates question and reply sharing by their owners. |
-| P5: evaluation and delivery | Pending | Complete fixture corpus, regression/e2e checks, measured retrieval and optional model comparisons. |
+| P5: evaluation and delivery | Initial evaluation and local delivery complete; research gates open | 60 seeded fixtures, 50 authored post-implementation tasks, matched keyword retrieval, selected cloud requester/peer checks, pinned Compose stack, restart and backup/restore, operator guide and bounded results report. Held-out model comparisons and real-user validation remain open. |
 
 ## P0 decisions
 
@@ -27,6 +27,16 @@ Runtime evidence containing local configuration stays in ignored `.nexus/`. Do n
 
 ## Current verification
 
-The current 23 checks passed: seven real-PostgreSQL storage/lifecycle tests, four HTTP boundary/session tests, three database-backed MCP tests, two protocol negotiation tests, two interoperability mapping tests, two bilateral help-consent tests and three bounded-context/screening tests. Tests use fresh task-owned databases and remove those databases after each test file. Fresh and incremental migrations both run against PostgreSQL 18.7. TypeScript/Vite build and formatting checks passed.
+The current **29 unit/integration checks and four browser journeys passed**. The integration set includes storage/lifecycle, HTTP boundaries/session handling, database-backed MCP, protocol negotiation, mapping previews, bilateral help consent, bounded context/screening, natural-language regression, set-based read-policy equivalence and actual Node-client recovery after an idle backend is terminated. Fresh task-owned test databases are removed afterward. Eight migrations apply both fresh and incrementally against PostgreSQL 18.7.
 
-The owner selected Ollama Cloud with DeepSeek 4.1 Flash for actual requester evaluation. The existing local Ollama API successfully relayed a bounded connectivity check to that cloud model. This is a cloud-requester check, not evidence of small local model performance. Full task comparisons remain pending.
+The owner chose **Option 3, Evidence Workbench**, using the supplied AiRC circuit-A logo, navy/cyan identity, Inter controls and Source Serif 4 reading typography. Desktop and narrow captures, real MathML, separate sharing/revocation and selected-tag automated accessibility checks passed. See the root [design QA](../design-qa.md).
+
+The owner selected Ollama Cloud with DeepSeek 4.1 Flash. A live requester retrieved the intended exact revision, retained its unverified scope and recorded a private harness outcome. Two isolated sessions also completed request → simulated fixture-owner approval → private reply → separate approval → requester report → revocation. These checks use one cloud model under one operator, not a smaller-local-model or independent-replication benchmark.
+
+The final isolated retrieval run found the target in the top five for **30/30 answerable tasks**; the flat-keyword arm also scored **30/30**. All **10/10 wrong-version tasks** excluded incompatible records. Of ten unfamiliar questions with unknown compatibility explicitly included, five returned no public candidate and five returned labeled broader matches. This is retrieval behavior, not an appropriate-abstention or validated-task-success score.
+
+At 1,000 synthetic records and ten concurrent clients, warm search p95 was **370.80 ms**, and get p95 **144.03 ms**, excluding model inference. Backup/restore, task-owned service recovery and the isolated Compose privilege/port checks passed. See the [validation report](validation/prototype-2026-11-15.md), [operator guide](operator-guide.md) and [dependency declarations](validation/dependencies.json).
+
+## Open acceptance gates
+
+The implementation is ready for local exploration. The original 200-run, two-model comparison has not been run: the user selected a single cloud model, no suitable smaller local model was provisioned, and the new 50-task set was authored after tuning. No incremental usefulness/token-saving claim, real scientific replication, independent-node federation, production identity or public-service readiness is established. The next research pilot needs genuinely held-out tasks, a selected smaller model, paired outcomes and consenting outside users before those gates can be accepted.

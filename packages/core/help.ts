@@ -85,7 +85,7 @@ export class HelpExchange {
     return withActor(this.pool, actor, async (db) => {
       const { rows } = await db.query(
         `SELECT id,question,environment,digest,screening,state,expires_at,created_at,
-        owner_id=$1 AS mine,recipient_owner_id FROM nexus.help_requests
+        owner_id=$1 AS mine,recipient_owner_id,nexus.help_actor_kind(id,false) AS creator_kind FROM nexus.help_requests
         WHERE ($2::uuid IS NULL OR id=$2) ORDER BY created_at DESC LIMIT 50`,
         [actor.owner_id, id ?? null],
       );
@@ -93,7 +93,7 @@ export class HelpExchange {
       for (const row of rows) {
         row.replies = (
           await db.query(
-            `SELECT id,${id ? 'content,' : ''}digest,shared,owner_id=$2 AS mine,screening,created_at
+            `SELECT id,${id ? 'content,' : ''}digest,shared,owner_id=$2 AS mine,screening,created_at,nexus.help_actor_kind(id,true) AS creator_kind
           FROM nexus.help_replies WHERE request_id=$1 ORDER BY created_at DESC LIMIT 10`,
             [row.id, actor.owner_id],
           )

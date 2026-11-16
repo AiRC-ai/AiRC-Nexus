@@ -1,6 +1,6 @@
 # First AiRC Nexus prototype: concrete build plan
 
-Proposed November 15, 2026. Planning status: ready for implementation review. Nothing described here is implemented, benchmarked, deployed, or approved as a permanent protocol. The [landscape review](research/landscape-2026-11-15.md) explains the existing work and the build/reuse decisions.
+Proposed November 15, 2026. This document records the original build/research proposal. The local implementation and observed checks are tracked in [implementation status](implementation-status.md) and the [validation report](validation/prototype-2026-11-15.md); proposed research thresholds below are not automatically accepted results. The [landscape review](research/landscape-2026-11-15.md) explains the existing work and build/reuse decisions. No permanent public protocol is established.
 
 Implementation has since started. This document preserves the original proposal; use [implementation status](implementation-status.md) for current evidence and [mission alignment](mission-alignment.md) for the owner-requested help-exchange addition. Apache-2.0 has now been selected for project source/documentation; per-record rights and outside contribution policies remain explicit.
 
@@ -93,7 +93,7 @@ tests/e2e/              browser journeys
 compose.yaml            local application, worker and database
 ```
 
-This layout is a plan; the directories and commands do not exist yet.
+The implementation now follows this layout, with an additional bounded help-exchange surface and its tests. See the operator guide for the actual commands.
 
 ## 6. Data contract
 
@@ -279,9 +279,9 @@ Only then consider **bounded A2A assistance** for genuine search misses: an expl
 
 ## 14. Decisions before implementation expands
 
-- **License:** recommend evaluating Apache-2.0 for core software/protocol code, with an explicit documentation policy and per-record rights. No license is selected or added by this plan. Resolve the project decision before accepting outside implementation contributions or releasing software.
-- **Required clients:** name the two initial clients and pin their observed capabilities during P0. Compatibility with every AI product is not promised.
+- **License, resolved:** the owner selected Apache-2.0 for project source/documentation; per-record rights remain explicit. The local build includes the license and dependency declarations.
+- **Required clients, locally checked:** official SDK clients and the installed Codex CLI compatibility probe have recorded capabilities. The owner-selected Ollama Cloud/DeepSeek harness completed actual MCP journeys. Compatibility with every AI product is not promised.
 - **Evidence scope:** approve the small software/computational fixture set, review policy and operator identities. Outside scientific claims need appropriate domain review.
-- **Budget:** set an actual compute/reviewer cap before model evaluation or any hosted pilot; grants and partners are not prerequisites or established funding.
+- **Budget:** the selected cloud smoke/peer stages use the bounded harness described in the operator guide. A larger model comparison, real reviewer effort or hosted pilot needs its own operating budget; grants and partners are not prerequisites or established funding.
 
 These decisions do not prevent preparing the repository or testing authored local fixtures. They are explicit expansion gates, not a request to create accounts, spend money, share private project histories or deploy a service.

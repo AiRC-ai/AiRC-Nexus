@@ -9,7 +9,7 @@ export function screen(content: unknown) {
   const { intended_visibility: intended, ...fields } = envelope;
   const valid = ContentSchema.safeParse(fields);
   if (!valid.success) reasons.push('invalid_schema');
-  const raw = JSON.stringify(content);
+  const raw = JSON.stringify(content) ?? 'null';
   if (Buffer.byteLength(raw) > 65_536) reasons.push('oversized_content');
   reasons.push(...screenText(raw));
   return {

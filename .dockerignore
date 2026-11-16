@@ -1,0 +1,12 @@
+.git
+.nexus
+.env*
+node_modules
+dist
+apps/web/dist
+test-results
+playwright-report
+coverage
+docs
+design-qa.md
+.DS_Store

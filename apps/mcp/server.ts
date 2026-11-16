@@ -260,15 +260,24 @@ export function createNexusServer(base: string, token?: string) {
           undefined,
           ctx.mcpReq.signal,
         );
-        if (Buffer.byteLength(JSON.stringify(data)) > input.budget_bytes)
-          return result({
+        if (Buffer.byteLength(JSON.stringify(data)) > input.budget_bytes) {
+          const detail = {
             status: 'requires_detail',
             truncated: true,
-            request_ids: data.requests.map((r: { id: string }) => r.id),
+            request_ids: [] as string[],
             guidance:
-              'Read one request or inspect the full permitted context in the website. No question or reply was shortened into advice.',
+              'Read one request by ID or inspect permitted context in the website. Questions and replies were omitted whole; references may also be omitted to fit.',
             demo: true,
-          });
+          };
+          for (const request of data.requests as { id: string }[]) {
+            detail.request_ids.push(request.id);
+            if (Buffer.byteLength(JSON.stringify(detail)) > input.budget_bytes) {
+              detail.request_ids.pop();
+              break;
+            }
+          }
+          return result(detail);
+        }
         return result(data);
       } catch {
         return failure();

@@ -1,0 +1,566 @@
+{
+  "schema_version": 1,
+  "scope": "Authored post-implementation regression pilot. Defined after initial tuning; not held-out or independently curated. No model success comparison is implied.",
+  "tasks": [
+    {
+      "id": "answerable-01",
+      "kind": "answerable",
+      "query": "Form rejects an entered zero as missing data",
+      "expected_record": 1,
+      "environment": {
+        "runtime": "node",
+        "version": "24.22.3"
+      },
+      "profile": "software_fix",
+      "include_unknown": false
+    },
+    {
+      "id": "answerable-02",
+      "kind": "answerable",
+      "query": "Converting 12px to an integer silently accepts trailing text",
+      "expected_record": 2,
+      "environment": {
+        "runtime": "node",
+        "version": "24.22.3"
+      },
+      "profile": "software_fix",
+      "include_unknown": false
+    },
+    {
+      "id": "answerable-03",
+      "kind": "answerable",
+      "query": "My array orders 10 before 2 when sorting numbers",
+      "expected_record": 3,
+      "environment": {
+        "runtime": "node",
+        "version": "24.22.3"
+      },
+      "profile": "software_fix",
+      "include_unknown": false
+    },
+    {
+      "id": "answerable-04",
+      "kind": "answerable",
+      "query": "An async map gives me promises instead of completed values",
+      "expected_record": 4,
+      "environment": {
+        "runtime": "node",
+        "version": "24.22.3"
+      },
+      "profile": "software_fix",
+      "include_unknown": false
+    },
+    {
+      "id": "answerable-05",
+      "kind": "answerable",
+      "query": "Objects with matching fields compare unequal",
+      "expected_record": 5,
+      "environment": {
+        "runtime": "node",
+        "version": "24.22.3"
+      },
+      "profile": "software_fix",
+      "include_unknown": false
+    },
+    {
+      "id": "answerable-06",
+      "kind": "answerable",
+      "query": "Literal punctuation in a search pattern becomes regular expression syntax",
+      "expected_record": 6,
+      "environment": {
+        "runtime": "node",
+        "version": "24.22.3"
+      },
+      "profile": "software_fix",
+      "include_unknown": false
+    },
+    {
+      "id": "answerable-07",
+      "kind": "answerable",
+      "query": "A query parameter containing an ampersand changes the URL",
+      "expected_record": 7,
+      "environment": {
+        "runtime": "node",
+        "version": "24.22.3"
+      },
+      "profile": "software_fix",
+      "include_unknown": false
+    },
+    {
+      "id": "answerable-08",
+      "kind": "answerable",
+      "query": "Local midnight becomes a different date in UTC serialization",
+      "expected_record": 8,
+      "environment": {
+        "runtime": "node",
+        "version": "24.22.3"
+      },
+      "profile": "software_fix",
+      "include_unknown": false
+    },
+    {
+      "id": "answerable-09",
+      "kind": "answerable",
+      "query": "Decimal currency additions accumulate rounding errors",
+      "expected_record": 9,
+      "environment": {
+        "runtime": "node",
+        "version": "24.22.3"
+      },
+      "profile": "software_fix",
+      "include_unknown": false
+    },
+    {
+      "id": "answerable-10",
+      "kind": "answerable",
+      "query": "Large integer identifiers lose precision after Number conversion",
+      "expected_record": 10,
+      "environment": {
+        "runtime": "node",
+        "version": "24.22.3"
+      },
+      "profile": "software_fix",
+      "include_unknown": false
+    },
+    {
+      "id": "answerable-11",
+      "kind": "answerable",
+      "query": "JSON serialization drops an undefined object field",
+      "expected_record": 11,
+      "environment": {
+        "runtime": "node",
+        "version": "24.22.3"
+      },
+      "profile": "software_fix",
+      "include_unknown": false
+    },
+    {
+      "id": "answerable-12",
+      "kind": "answerable",
+      "query": "Parsed JSON has the wrong nested object shape",
+      "expected_record": 12,
+      "environment": {
+        "runtime": "node",
+        "version": "24.22.3"
+      },
+      "profile": "software_fix",
+      "include_unknown": false
+    },
+    {
+      "id": "answerable-13",
+      "kind": "answerable",
+      "query": "Sorting an array modifies data shared with another caller",
+      "expected_record": 13,
+      "environment": {
+        "runtime": "node",
+        "version": "24.22.3"
+      },
+      "profile": "software_fix",
+      "include_unknown": false
+    },
+    {
+      "id": "answerable-14",
+      "kind": "answerable",
+      "query": "Endpoint crashes when the JSON request body is absent",
+      "expected_record": 14,
+      "environment": {
+        "runtime": "node",
+        "version": "24.22.3"
+      },
+      "profile": "software_fix",
+      "include_unknown": false
+    },
+    {
+      "id": "answerable-15",
+      "kind": "answerable",
+      "query": "An optional array field accepts an object instead",
+      "expected_record": 15,
+      "environment": {
+        "runtime": "node",
+        "version": "24.22.3"
+      },
+      "profile": "software_fix",
+      "include_unknown": false
+    },
+    {
+      "id": "answerable-16",
+      "kind": "answerable",
+      "query": "Unicode string length differs from the encoded UTF-8 payload size",
+      "expected_record": 16,
+      "environment": {
+        "runtime": "node",
+        "version": "24.22.3"
+      },
+      "profile": "software_fix",
+      "include_unknown": false
+    },
+    {
+      "id": "answerable-17",
+      "kind": "answerable",
+      "query": "Base64 decoding corrupts bytes that are not Unicode text",
+      "expected_record": 17,
+      "environment": {
+        "runtime": "node",
+        "version": "24.22.3"
+      },
+      "profile": "software_fix",
+      "include_unknown": false
+    },
+    {
+      "id": "answerable-18",
+      "kind": "answerable",
+      "query": "Quoted commas break my CSV line splitting",
+      "expected_record": 18,
+      "environment": {
+        "runtime": "node",
+        "version": "24.22.3"
+      },
+      "profile": "software_fix",
+      "include_unknown": false
+    },
+    {
+      "id": "answerable-19",
+      "kind": "answerable",
+      "query": "Strict JSON configuration must reject JavaScript comments",
+      "expected_record": 19,
+      "environment": {
+        "runtime": "node",
+        "version": "24.22.3"
+      },
+      "profile": "software_fix",
+      "include_unknown": false
+    },
+    {
+      "id": "answerable-20",
+      "kind": "answerable",
+      "query": "Mean of an empty sample produces NaN",
+      "expected_record": 20,
+      "environment": {
+        "runtime": "node",
+        "version": "24.22.3"
+      },
+      "profile": "software_fix",
+      "include_unknown": false
+    },
+    {
+      "id": "answerable-21",
+      "kind": "answerable",
+      "query": "Find the population variance of the synthetic observations 1,2,3",
+      "expected_record": 31,
+      "environment": {
+        "dataset": "nexus-synthetic-v1"
+      },
+      "profile": "computational_method",
+      "include_unknown": false
+    },
+    {
+      "id": "answerable-22",
+      "kind": "answerable",
+      "query": "Find the sample variance using n minus one for observations 1,2,3",
+      "expected_record": 32,
+      "environment": {
+        "dataset": "nexus-synthetic-v1"
+      },
+      "profile": "computational_method",
+      "include_unknown": false
+    },
+    {
+      "id": "answerable-23",
+      "kind": "answerable",
+      "query": "Fit a straight line with an intercept through points (0,1),(1,3),(2,5)",
+      "expected_record": 33,
+      "environment": {
+        "dataset": "nexus-synthetic-v1"
+      },
+      "profile": "computational_method",
+      "include_unknown": false
+    },
+    {
+      "id": "answerable-24",
+      "kind": "answerable",
+      "query": "Convert histogram bin counts 2,3,5 into probability masses",
+      "expected_record": 34,
+      "environment": {
+        "dataset": "nexus-synthetic-v1"
+      },
+      "profile": "computational_method",
+      "include_unknown": false
+    },
+    {
+      "id": "answerable-25",
+      "kind": "answerable",
+      "query": "Compute the dot product of vectors [1,2,3] and [4,5,6]",
+      "expected_record": 35,
+      "environment": {
+        "dataset": "nexus-synthetic-v1"
+      },
+      "profile": "computational_method",
+      "include_unknown": false
+    },
+    {
+      "id": "answerable-26",
+      "kind": "answerable",
+      "query": "How should I transpose a two by three matrix?",
+      "expected_record": 36,
+      "environment": {
+        "dataset": "nexus-synthetic-v1"
+      },
+      "profile": "computational_method",
+      "include_unknown": false
+    },
+    {
+      "id": "answerable-27",
+      "kind": "answerable",
+      "query": "Min-max normalization for values 2,4,6 has what result?",
+      "expected_record": 37,
+      "environment": {
+        "dataset": "nexus-synthetic-v1"
+      },
+      "profile": "computational_method",
+      "include_unknown": false
+    },
+    {
+      "id": "answerable-28",
+      "kind": "answerable",
+      "query": "Estimate derivative of x squared at 3 using a centered finite difference",
+      "expected_record": 38,
+      "environment": {
+        "dataset": "nexus-synthetic-v1"
+      },
+      "profile": "computational_method",
+      "include_unknown": false
+    },
+    {
+      "id": "answerable-29",
+      "kind": "answerable",
+      "query": "Integrate f(x)=x on [0,1] using the trapezoidal rule",
+      "expected_record": 39,
+      "environment": {
+        "dataset": "nexus-synthetic-v1"
+      },
+      "profile": "computational_method",
+      "include_unknown": false
+    },
+    {
+      "id": "answerable-30",
+      "kind": "answerable",
+      "query": "Calculate Jaccard set similarity of {1,2} and {2,3}",
+      "expected_record": 40,
+      "environment": {
+        "dataset": "nexus-synthetic-v1"
+      },
+      "profile": "computational_method",
+      "include_unknown": false
+    },
+    {
+      "id": "wrong-version-01",
+      "kind": "wrong_version",
+      "query": "Form rejects an entered zero as missing data",
+      "expected_record": null,
+      "environment": {
+        "runtime": "node",
+        "version": "20.0.0"
+      },
+      "profile": "software_fix",
+      "include_unknown": false
+    },
+    {
+      "id": "wrong-version-02",
+      "kind": "wrong_version",
+      "query": "Converting 12px to an integer silently accepts trailing text",
+      "expected_record": null,
+      "environment": {
+        "runtime": "node",
+        "version": "20.0.0"
+      },
+      "profile": "software_fix",
+      "include_unknown": false
+    },
+    {
+      "id": "wrong-version-03",
+      "kind": "wrong_version",
+      "query": "My array orders 10 before 2 when sorting numbers",
+      "expected_record": null,
+      "environment": {
+        "runtime": "node",
+        "version": "20.0.0"
+      },
+      "profile": "software_fix",
+      "include_unknown": false
+    },
+    {
+      "id": "wrong-version-04",
+      "kind": "wrong_version",
+      "query": "An async map gives me promises instead of completed values",
+      "expected_record": null,
+      "environment": {
+        "runtime": "node",
+        "version": "20.0.0"
+      },
+      "profile": "software_fix",
+      "include_unknown": false
+    },
+    {
+      "id": "wrong-version-05",
+      "kind": "wrong_version",
+      "query": "Objects with matching fields compare unequal",
+      "expected_record": null,
+      "environment": {
+        "runtime": "node",
+        "version": "20.0.0"
+      },
+      "profile": "software_fix",
+      "include_unknown": false
+    },
+    {
+      "id": "wrong-version-06",
+      "kind": "wrong_version",
+      "query": "Literal punctuation in a search pattern becomes regular expression syntax",
+      "expected_record": null,
+      "environment": {
+        "runtime": "node",
+        "version": "20.0.0"
+      },
+      "profile": "software_fix",
+      "include_unknown": false
+    },
+    {
+      "id": "wrong-version-07",
+      "kind": "wrong_version",
+      "query": "A query parameter containing an ampersand changes the URL",
+      "expected_record": null,
+      "environment": {
+        "runtime": "node",
+        "version": "20.0.0"
+      },
+      "profile": "software_fix",
+      "include_unknown": false
+    },
+    {
+      "id": "wrong-version-08",
+      "kind": "wrong_version",
+      "query": "Local midnight becomes a different date in UTC serialization",
+      "expected_record": null,
+      "environment": {
+        "runtime": "node",
+        "version": "20.0.0"
+      },
+      "profile": "software_fix",
+      "include_unknown": false
+    },
+    {
+      "id": "wrong-version-09",
+      "kind": "wrong_version",
+      "query": "Decimal currency additions accumulate rounding errors",
+      "expected_record": null,
+      "environment": {
+        "runtime": "node",
+        "version": "20.0.0"
+      },
+      "profile": "software_fix",
+      "include_unknown": false
+    },
+    {
+      "id": "wrong-version-10",
+      "kind": "wrong_version",
+      "query": "Large integer identifiers lose precision after Number conversion",
+      "expected_record": null,
+      "environment": {
+        "runtime": "node",
+        "version": "20.0.0"
+      },
+      "profile": "software_fix",
+      "include_unknown": false
+    },
+    {
+      "id": "no-public-answer-01",
+      "kind": "unanswerable",
+      "query": "CRISPR off-target sequencing workflow for a new cell line",
+      "expected_record": null,
+      "environment": {},
+      "profile": null,
+      "include_unknown": true
+    },
+    {
+      "id": "no-public-answer-02",
+      "kind": "unanswerable",
+      "query": "Protein folding confidence intervals for an unpublished enzyme",
+      "expected_record": null,
+      "environment": {},
+      "profile": null,
+      "include_unknown": true
+    },
+    {
+      "id": "no-public-answer-03",
+      "kind": "unanswerable",
+      "query": "Calibrate telescope photometry with atmospheric extinction",
+      "expected_record": null,
+      "environment": {},
+      "profile": null,
+      "include_unknown": true
+    },
+    {
+      "id": "no-public-answer-04",
+      "kind": "unanswerable",
+      "query": "Lithium battery electrolyte degradation under thermal cycling",
+      "expected_record": null,
+      "environment": {},
+      "profile": null,
+      "include_unknown": true
+    },
+    {
+      "id": "no-public-answer-05",
+      "kind": "unanswerable",
+      "query": "Geological isotope dating with missing laboratory measurements",
+      "expected_record": null,
+      "environment": {},
+      "profile": null,
+      "include_unknown": true
+    },
+    {
+      "id": "no-public-answer-06",
+      "kind": "unanswerable",
+      "query": "Optimize a CUDA kernel for sparse attention",
+      "expected_record": null,
+      "environment": {},
+      "profile": null,
+      "include_unknown": true
+    },
+    {
+      "id": "no-public-answer-07",
+      "kind": "unanswerable",
+      "query": "Swift PDF recipe import fails on a real scanned document",
+      "expected_record": null,
+      "environment": {},
+      "profile": null,
+      "include_unknown": true
+    },
+    {
+      "id": "no-public-answer-08",
+      "kind": "unanswerable",
+      "query": "Rust borrow checker error in a recursive async function",
+      "expected_record": null,
+      "environment": {},
+      "profile": null,
+      "include_unknown": true
+    },
+    {
+      "id": "no-public-answer-09",
+      "kind": "unanswerable",
+      "query": "Clinical efficacy of a newly proposed cancer intervention",
+      "expected_record": null,
+      "environment": {},
+      "profile": null,
+      "include_unknown": true
+    },
+    {
+      "id": "no-public-answer-10",
+      "kind": "unanswerable",
+      "query": "Reproduce a specific unpublished neuroscience experiment",
+      "expected_record": null,
+      "environment": {},
+      "profile": null,
+      "include_unknown": true
+    }
+  ]
+}
