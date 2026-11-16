@@ -1,0 +1,60 @@
+{
+  "name": "airc-nexus",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Local AiRC Nexus evidence-reuse prototype",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json && vite build --config apps/web/vite.config.ts",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test": "vitest run",
+    "test:unit": "vitest run tests/unit",
+    "test:integration": "vitest run tests/integration",
+    "test:mcp": "vitest run tests/integration/mcp.test.ts",
+    "start": "node dist/apps/server/main.js",
+    "mcp": "node dist/apps/mcp/main.js",
+    "worker": "node dist/apps/worker/main.js",
+    "db:migrate": "node dist/scripts/migrate.js",
+    "db:seed": "node dist/scripts/seed.js",
+    "dev": "tsx apps/server/main.ts",
+    "dev:web": "vite build --watch --config apps/web/vite.config.ts",
+    "setup": "tsx scripts/bootstrap.ts",
+    "demo": "node scripts/demo.mjs",
+    "demo:stop": "node scripts/demo.mjs --stop",
+    "format:check": "prettier --check apps packages scripts tests fixtures package.json tsconfig.json vitest.config.ts"
+  },
+  "dependencies": {
+    "@fastify/cookie": "11.1.5",
+    "@fastify/helmet": "13.2.0",
+    "@fastify/rate-limit": "11.2.2",
+    "@fastify/static": "10.1.11",
+    "@modelcontextprotocol/client": "2.4.0",
+    "@modelcontextprotocol/server": "2.4.0",
+    "canonicalize": "5.1.0",
+    "fastify": "5.12.8",
+    "pg": "8.23.1",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "semver": "7.8.6",
+    "zod": "4.6.7"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "4.14.0",
+    "@playwright/test": "1.65.1",
+    "@types/node": "24.19.2",
+    "@types/pg": "8.23.1",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "@types/semver": "7.8.0",
+    "@vitejs/plugin-react": "6.3.0",
+    "prettier": "3.10.1",
+    "tsx": "4.23.15",
+    "typescript": "7.0.2",
+    "vite": "8.3.8",
+    "vitest": "5.1.0"
+  },
+  "license": "Apache-2.0"
+}

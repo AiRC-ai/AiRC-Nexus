@@ -13,3 +13,12 @@
 # Local editor state
 .idea/
 .vscode/
+
+# Dependencies, local runtime and private prototype data
+node_modules/
+dist/
+.nexus/
+coverage/
+test-results/
+playwright-report/
+*.tsbuildinfo

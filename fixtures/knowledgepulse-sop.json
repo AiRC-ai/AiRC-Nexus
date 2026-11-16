@@ -1,0 +1,23 @@
+{
+  "@context": "https://openknowledgepulse.org/schema/v1",
+  "@type": "ExpertSOP",
+  "id": "kp:sop:nexus-authored-demo",
+  "name": "Preserve zero during validation",
+  "domain": "code",
+  "metadata": {
+    "created_at": "2026-11-15T00:00:00Z",
+    "task_domain": "code",
+    "success": true,
+    "quality_score": 0.8,
+    "visibility": "network",
+    "privacy_level": "aggregated",
+    "validated_by": []
+  },
+  "source": { "type": "human_expert", "expert_id": "kp:expert:nexus-demo", "credentials": [] },
+  "decision_tree": [
+    {
+      "step": "check",
+      "instruction": "Check null and undefined explicitly before rejecting a numeric zero."
+    }
+  ]
+}

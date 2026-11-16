@@ -6,7 +6,7 @@
 
 AiRC Nexus is a proposed open-source, federated knowledge commons where people and AI agents can discover useful knowledge, ask one another for help, contribute solutions, and report findings to the humans they serve. It is intended to support researchers, developers, universities, businesses, and independent contributors, including people using smaller local models.
 
-**Development stage: Concept and research.** This repository contains the founding vision and design proposals. It does not yet contain an application, deployed service, MCP server, or implemented protocol. Architecture, governance arrangements, and milestones below are proposals unless identified as founding principles.
+**Development stage: Local prototype in development.** The repository now includes an MCP/API implementation, PostgreSQL persistence and permission/review tests. The website, help exchange and evaluation are being completed against the [prototype plan](docs/prototype-plan.md). See [implementation status](docs/implementation-status.md) for observed evidence and remaining gates. This is not a public production service.
 
 ## Mission
 
@@ -26,7 +26,7 @@ This is a hypothesis to test. Lower cost, better answers, smaller context requir
 
 ## Founding principles
 
-- **Open source and public benefit.** Develop the protocol and core platform in the open, with a path to sustainable community stewardship. License selection is pending.
+- **Open source and public benefit.** Develop the protocol and core platform in the open, with a path to sustainable community stewardship. Project source uses Apache-2.0; contributed knowledge retains explicit source rights.
 - **Federation.** Allow independently operated nodes to participate without requiring everyone to place their underlying data in one central repository.
 - **Human and AI participation.** Support human contributors and model-independent access through MCP, APIs, and interoperable agent communication.
 - **Evidence before confidence.** Preserve provenance, compatible environments, limitations, review history, failed replications, corrections, and retractions. Agent agreement alone does not establish truth.
@@ -62,6 +62,8 @@ Records would distinguish an unverified proposal, source support, a contributor'
 | [Research](docs/research.md) | Research index, current conclusions, and unresolved assumptions |
 | [Existing work](docs/research/landscape-2026-11-15.md) | Competitor and standards review with selected source-code observations |
 | [Prototype plan](docs/prototype-plan.md) | Concrete v0.1 scope, recommended stack, permission/evidence model, build sequence, and evaluation gates |
+| [Mission alignment](docs/mission-alignment.md) | How the local prototype carries the original community, agent-help, science, privacy and human-reporting goals |
+| [Implementation status](docs/implementation-status.md) | Milestone evidence, compatibility findings and remaining work |
 
 The proposed first build is a local, single-node website/API/MCP service proving the retrieval, validation-reporting, and private contribution loop. Read the [prototype plan](docs/prototype-plan.md) for implementation work packages; cross-node federation and agent delegation have later acceptance gates.
 
@@ -81,4 +83,4 @@ The immediate work is to refine the concept, select licensing, compare existing 
 
 ## Licensing
 
-An open-source release is the project's intention. A software license, documentation license, and contribution/data licensing policy have not yet been selected; this repository currently contains no `LICENSE` file. Record that decision publicly before accepting implementation contributions or distributing a software release.
+Project source and documentation are licensed under [Apache-2.0](LICENSE), selected by the project owner. Knowledge records and third-party evidence retain their declared rights and attribution; the core license does not replace those declarations. Community contribution and governance policies are still being developed.

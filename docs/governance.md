@@ -43,17 +43,17 @@ A nonprofit foundation or neutral fiscal host is an option for later evaluation.
 
 ## Licensing decisions
 
-No license has been selected. Before accepting implementation contributions, agree on and document:
+The project owner selected Apache-2.0 on November 15, 2026, and the repository now includes that license for project source and documentation. Before accepting outside contributions, finish the following policy decisions:
 
 | Asset or activity | Decision needed |
 | --- | --- |
-| Protocol and core software | Open-source license, compatibility goals, and third-party obligations |
-| Documentation and specifications | Documentation license and attribution terms |
+| Protocol and core software | Apache-2.0 selected; document compatibility goals and third-party obligations |
+| Documentation and specifications | Apache-2.0 project documentation; preserve third-party attribution and exceptions |
 | Knowledge records and evidence | Per-record source rights, contribution terms, permitted reuse, and artifact-specific restrictions |
 | Contributions | Contributor attestation and whether a DCO or other agreement is appropriate |
 | Name and identity | Trademark ownership and community use policy |
 
-A software license does not decide how third-party datasets, papers, or restricted evidence may be distributed. Resolve those permissions for each relevant source and artifact. The initial repository intentionally has no `LICENSE` file while this decision is open.
+A software license does not decide how third-party datasets, papers, or restricted evidence may be distributed. Resolve those permissions for each relevant source and artifact.
 
 ## Sustainable operation
 

@@ -2,6 +2,8 @@
 
 Proposed November 15, 2026. Planning status: ready for implementation review. Nothing described here is implemented, benchmarked, deployed, or approved as a permanent protocol. The [landscape review](research/landscape-2026-11-15.md) explains the existing work and the build/reuse decisions.
 
+Implementation has since started. This document preserves the original proposal; use [implementation status](implementation-status.md) for current evidence and [mission alignment](mission-alignment.md) for the owner-requested help-exchange addition. Apache-2.0 has now been selected for project source/documentation; per-record rights and outside contribution policies remain explicit.
+
 ## 1. Outcome to prove
 
 An agent using a smaller model can find an applicable, evidence-backed solution, validate it in an authorized local environment, report what happened to its human, and offer a sanitized private contribution. A human can inspect the exact revision, evidence, and proposed audience before approving publication. A second requester can reuse the result and add a failed outcome without erasing earlier evidence.
